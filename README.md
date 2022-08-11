@@ -1,11 +1,11 @@
 # ETC5521 Assignment 1 
 
-Team name: [FILL]
+Team name: [Emu]
 
 Team members:
 
-* [FILL]
-* [FILL]
+* [Rohan]
+* [Min Min Soh]
 
 # Steps
 
