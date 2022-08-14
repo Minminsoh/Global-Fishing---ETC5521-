@@ -1,16 +1,32 @@
 ---
 title: "ETC5521 Assignment 1"
 subtitle: "Your title"
-team: [FILL]
+team: [emu]
 author:
   - [FILL]
-  - [FILL]
+  - Min Min Soh
 date: "`r Sys.Date()`"
 output: 
   html_document
 ---
 
 [This assignment is for ETC5521 Assignment 1 by Team `r rmarkdown::metadata$team` comprising of `r knitr::combine_words(rmarkdown::metadata$author)`.]{style="color:#006DAE;"}
+
+```{r}
+library(tidyverse)
+```
+
+
+
+```{r}
+farmed <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-12/aquaculture-farmed-fish-production.csv')
+
+captured <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-12/capture-fishery-production.csv')
+
+stock <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-12/fish-stocks-within-sustainable-levels.csv')
+fishery <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-12/global-fishery-catch-by-sector.csv')
+
+```
 
 
 # Introduction and motivation
@@ -21,9 +37,33 @@ output:
 
 [FILL] Source of the data, and detail the structure of the data
 
+
+
+```{r}
+#read data
+farmed <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-12/aquaculture-farmed-fish-production.csv')
+captured_vs_farmed <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-12/capture-fisheries-vs-aquaculture.csv')
+captured <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-12/capture-fishery-production.csv')
+consumption <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-12/fish-and-seafood-consumption-per-capita.csv')
+stock <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-12/fish-stocks-within-sustainable-levels.csv')
+fishery <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-12/global-fishery-catch-by-sector.csv')
+production <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-12/seafood-and-fish-production-thousand-tonnes.csv')
+
+```
+
 # Questions of interest
 
 [FILL] What questions might be possible to answer with this data, aiming for about 20. Bold the 3-4 questions you will address in the analysis
+
+- What can we learn about the way prices rose and fell throughout a single region and across a wide range of prices?
+interested in discovering patterns of the weekly sales of residential real estates prices across San Francisco Bay Area
+
+- What can we learn about the trend in seafood consumption by countries and across the years ? 
+- How much seafood comes from aquaculture and capture fishing production across the years? 
+- What can we learn about the different types of seafood and fish production by countries and across the years?  
+- What can we observe from share of fish stocks from sustainable fishing and fish stocks that are overexploted across the years? 
+- What can we learn about the uses of fish catch by countries and across the years? 
+
 
 # Expected findings
 
