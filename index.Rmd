@@ -129,8 +129,6 @@ The data dictionary for the data set has been given below. They define the varia
 
 # Questions of interest
 
-
-
 Q1 What is the contribution of each production sector in global fishery from 1950 ? 
 
 Q2 **What is the contribution of each country in the global fishery sector ?** - PICKED  #captured 
@@ -173,10 +171,20 @@ Q20 How much fresh water produce in each country over time ?
 
 # Expected findings
 
-[FILL] For your chosen questions explain what you think you might find.
+**What is the contribution of each country in the global fishery sector ?**
+
+- The expectation is that of growing trend in fishing for each country for feeding the increasing populace.
+- Countries that are landlocked or that do not have a big coastline will be contributing less to the fishery sector.
+
+**What has been the trend of sustainable levels of fish stocks in the world ?**
+
+- An increase in the trend of over-exploitation of fish stocks all over the world.
+- A decreasing trend in the biologically sustainable levels of fish stocks all over the world.
 
 # Analysis and findings
 
 [FILL] Should include at least one plot or numerical summary for each of your questions, that helps the reader arrive at an answer. You should also write paragraphs describing the methods, summaries and findings. 
 
 # References
+
+Hannah Ritchie and Max Roser (2021) - "Biodiversity". Published online at OurWorldInData.org. Retrieved from: 'https://ourworldindata.org/biodiversity' [Online Resource]
