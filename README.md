@@ -4,7 +4,7 @@ Team name: [Emu]
 
 Team members:
 
-* [Rohan]
+* [Rohan Baghel]
 * [Min Min Soh]
 
 # Steps

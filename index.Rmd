@@ -1,10 +1,10 @@
 ---
 title: "ETC5521 Assignment 1"
 subtitle: "Your title"
-team: [FILL]
+team: [EMU]
 author:
-  - [FILL]
-  - [FILL]
+  - [Min Min Soh]
+  - [Rohan Baghel]
 date: "`r Sys.Date()`"
 output: 
   html_document
@@ -19,11 +19,157 @@ output:
 
 # Data description
 
-[FILL] Source of the data, and detail the structure of the data
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+library(tidyverse)
+library(ggplot2)
+library(tidytuesdayR)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+farmed <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-12/aquaculture-farmed-fish-production.csv')
+
+captured_vs_farmed <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-12/capture-fisheries-vs-aquaculture.csv')
+
+captured <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-12/capture-fishery-production.csv')
+
+consumption <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-12/fish-and-seafood-consumption-per-capita.csv')
+
+stock <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-12/fish-stocks-within-sustainable-levels.csv')
+
+fishery <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-12/global-fishery-catch-by-sector.csv')
+
+production <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-12/seafood-and-fish-production-thousand-tonnes.csv')
+```
+
+```{r}
+
+```
+
+The data set has been obtained from the website https://ourworldindata.org. The data comprises of seven files in the ".csv" format which is machine readable and can be used to analyze the state of fish production and consumption in the world. 
+
+The data dictionary for the data set has been given below. They define the variables and their types in each of the data sets that has been given in the data set. 
+
+# `aquaculture-farmed-fish-production.csv`
+
+|variable                             |class     |description |
+|:------------------------------------|:---------|:-----------|
+|Entity                               |character | Country/entity |
+|Code                                 |character | Country code (see `countrycode` R package) |
+|Year                                 |double    |.           |
+|Aquaculture production (metric tons) |double    |.           |
+
+# `capture-fisheries-vs-aquaculture.csv`
+
+|variable                                   |class     |description |
+|:------------------------------------------|:---------|:-----------|
+|Entity                               |character | Country/entity |
+|Code                                 |character | Country code (see `countrycode` R package) |
+|Year                                       |double    | Year|
+|Aquaculture production (metric tons)       |double    | Production of aquaculture animals|
+|Capture fisheries production (metric tons) |double    | Captured aquaculture |
+
+# `capture-fishery-production.csv`
+
+|variable                                   |class     |description |
+|:------------------------------------------|:---------|:-----------|
+|Entity                               |character | Country/entity |
+|Code                                 |character | Country code (see `countrycode` R package) |
+|Year                                       |double    | Year |
+|Capture fisheries production (metric tons) |double    | Captured fisheres production |
+
+# `fish-and-seafood-consumption-per-capita.csv`
+
+|variable                                                       |class     |description |
+|:--------------------------------------------------------------|:---------|:-----------|
+|Entity                               |character | Country/entity |
+|Code                                 |character | Country code (see `countrycode` R package) |
+|Year                                                           |double    | Year |
+|Fish, Seafood- Food supply quantity (kg/capita/yr) (FAO, 2020) |double    | Food supply in fish in kg/capita/year |
+
+# `fish-stocks-within-sustainable-levels.csv`
+
+|variable                                                                |class     |description |
+|:-----------------------------------------------------------------------|:---------|:-----------|
+|Entity                               |character | Country/entity |
+|Code                                 |character | Country code (see `countrycode` R package) |
+|Year                                                                    |double    | Year |
+|Share of fish stocks within biologically sustainable levels (FAO, 2020) |double    | Share of sustainable fish stock |
+|Share of fish stocks that are overexploited                             |double    | Share of fish stock that are overexploited |
+
+
+# `global-fishery-catch-by-sector.csv`
+
+|variable                            |class     |description |
+|:-----------------------------------|:---------|:-----------|
+|Entity                               |character | Country/entity |
+|Code                                 |character | Country code (see `countrycode` R package) |
+|Year                                |double    | Year |
+|Artisanal (small-scale commercial)  |double    | Catch by small-scale commercial |
+|Discards                            |double    | Discarded quantities |
+|Industrial (large-scale commercial) |double    | Large scale commercial |
+|Recreational                        |double    | Recreational fishing |
+|Subsistence                         |double    | Food caught to feed self/family |
+
+# `seafood-and-fish-production-thousand-tonnes.csv`
+
+|variable                                      |class     |description |
+|:----------------------------------------------|:---------|:-----------|
+|Entity                               |character | Country/entity |
+|Code                                 |character | Country code (see `countrycode` R package) |
+|Year                                          |double    |.           |
+|Pelagic Fish - 2763 - Production - 5510 - tonnes       |double    | Pelagic Fish |
+|Crustaceans - 2765 - Production - 5510 - tonnes        |double    | Crustaceans |
+|Cephalopods - 2766 - Production - 5510 - tonnes        |double    | Cephalopods |
+|Demersal Fish - 2762 - Production - 5510 - tonnes      |double    | Demersal |
+|Freshwater Fish - 2761 - Production - 5510 - tonnes    |double    | Freshwater |
+|Molluscs, Other - 2767 - Production - 5510 - tonnes    |double    | Molluscs |
+|Marine Fish, Other - 2764 - Production - 5510 - tonnes |double    | Marine |
 
 # Questions of interest
 
-[FILL] What questions might be possible to answer with this data, aiming for about 20. Bold the 3-4 questions you will address in the analysis
+
+
+Q1 What is the contribution of each production sector in global fishery from 1950 ? 
+
+Q2 **What is the contribution of each country in the global fishery sector ?** - PICKED  #captured 
+
+Q3 What is the share of type of fishes produced in each country ? 
+
+Q4 What is the production level of each country by capturing over the years ?
+
+Q5 What is the production level of each country by farming over the years  ?
+
+Q6 **What has been the trend of seafood consumption of each country over the years ?** - PICKED #consumption data set 
+
+Q7 **What has been the trend of captured vs farmed production of each country over the years ?** - PICKED #captured vs farmed 
+
+Q8 **What has been the trend of sustainable levels of fish stocks in the world ?** - PICKED - #stock dataset 
+
+Q9 What is the share of fishes of the that have been been overexploited in the world over the years ? 
+
+Q10 Comparing the sustainable levels of fish stocks of world with the overall production in the world.  
+
+Q11 What is the production level of fish by each continent ?
+
+Q12 What is the consumption level of fish by each continent ?
+
+Q13 What can we learn about the uses of fish catch by countries? 
+
+Q14 What can we learn about the uses of fish catch across the years? 
+
+Q15  Comparing seafood production to seafood consumption across the years 
+
+Q16 What can we learn about the sustainable levels of fishing as compared to farming 
+
+Q17 Would aquaculture alleviate the pressure of seafood consumption across the years? 
+
+Q18 What can we observe about the seafood consumption in coastal countries and landlocked countries over time? 
+
+Q19 What can we observe about the level of seafood being discarded in the world across the years?
+
+Q20 How much fresh water produce in each country over time ? 
 
 # Expected findings
 
