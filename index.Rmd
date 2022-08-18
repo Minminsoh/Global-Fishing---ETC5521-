@@ -16,28 +16,17 @@ output:
 library(tidyverse)
 ```
 
-
-
-```{r}
-farmed <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-12/aquaculture-farmed-fish-production.csv')
-
-captured <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-12/capture-fishery-production.csv')
-
-stock <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-12/fish-stocks-within-sustainable-levels.csv')
-fishery <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-12/global-fishery-catch-by-sector.csv')
-
-```
-
-
-# Introduction and motivation
+# Introduction and motivation (Emily)
 
 [FILL] Give the bigger picture of the data, and inspire the reader to learn more about the problem by reading your analysis. 
 
-# Data description
+# Data description 
 
-[FILL] Source of the data, and detail the structure of the data
+[FILL] Source of the data, and detail the structure of the data (Rohan)
 
-
+---- source --- worlddata ... (more sources)
+---- table (what kind of data) - a short description of the variable class 
+--- 
 
 ```{r}
 #read data
@@ -55,19 +44,51 @@ production <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience
 
 [FILL] What questions might be possible to answer with this data, aiming for about 20. Bold the 3-4 questions you will address in the analysis
 
-- What can we learn about the way prices rose and fell throughout a single region and across a wide range of prices?
-interested in discovering patterns of the weekly sales of residential real estates prices across San Francisco Bay Area
+Q1 What is the contribution of each production sector in global fishery from 1950 ? 
 
-- What can we learn about the trend in seafood consumption by countries and across the years ? 
-- How much seafood comes from aquaculture and capture fishing production across the years? 
-- What can we learn about the different types of seafood and fish production by countries and across the years?  
-- What can we observe from share of fish stocks from sustainable fishing and fish stocks that are overexploted across the years? 
-- What can we learn about the uses of fish catch by countries and across the years? 
+Q2 ** What is the contribution of each country in the global fishery sector ? ** - PICKED  #captured 
 
+Q3 What is the share of type of fishes produced in each country ? 
 
-# Expected findings
+Q4 What is the production level of each country by capturing over the years ?
 
-[FILL] For your chosen questions explain what you think you might find.
+Q5 What is the production level of each country by farming over the years  ?
+
+Q6 ** What has beeen the trend of seafood consumption of each country over the years ? ** - PICKED #consumtion dataset 
+
+Q7 ** What has been the trend of captured vs farmed production of each country over the years ? ** - PICKED #captured vs farmed 
+
+Q8 ** What has been the trend of sustainable levels of fish stocks in the world ? ** - PICKED - #stock dataset 
+
+Q9 What is the share of fishes of the that have been been overexploited in the world over the years ? 
+
+Q10 Comparing the sustainable levels of fish stocks of world with the overall production in the world.  
+
+Q11 What is the production level of fish by each continent ?
+
+Q12 What is the consumption level of fish by each continent ?
+
+Q13 What can we learn about the uses of fish catch by countries? 
+
+Q14 What can we learn about the uses of fish catch across the years? 
+
+Q15  Comparing seafood production to seafood consumption across the years 
+
+Q16 What can we learn about the sustainable levels of fishing as compared to farming 
+
+Q17 Would aquaculture alleviate the pressure of seafood consumption across the years? 
+
+Q18 What can we observe about the seafood consumption in coastal countries and landlocked countries over time? 
+
+Q19 What can we observe about the level of seafood being discarded in the world across the years?
+
+Q20 How much fresh water produce in each country over time ? 
+
+# Expected findings (Emily * Rohan)
+
+[FILL] For your chosen questions explain what you think you might find. 
+
+(dvlp countries > seafood consumed... )... 
 
 # Analysis and findings
 
