@@ -597,7 +597,7 @@ trend_country_cf <- country_cf %>% filter (Year >= 2000) %>%
   labs(x = "Year", y = "Aquaculture production (metric tons)")+
   scale_y_continuous(trans = scales::log_trans(),
                      labels = scales::label_comma(scale = 1e-0))
-                     breaks = seq(min(country_cf$aquaculture), max(country_cf$aquaculture), by=100000))
+                     breaks = seq(min(country_cf$aquaculture), max(country_cf$aquaculture), by=100000)
 
 trend_country_cf
 
@@ -613,7 +613,7 @@ country_cf %>% filter (Year >= 2000) %>%
   geom_line()+
   ggtitle("Trend in aquaculture for the top 10 countries")+
   labs(x = "Year", y = "Aquaculture production (metric tons)")+
-  scale_y_continuous(labels = scales::label_comma(scale = 1e-0))+
+  scale_y_continuous(labels = scales::label_comma(scale = 1e-0))
   facet_wrap(~Entity)
 
 ```
