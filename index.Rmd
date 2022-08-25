@@ -496,7 +496,7 @@ trend_country_cf2 <- cf_data_long%>%
   labs(x = "Year", y = "Production (metric tons)")+
   scale_y_continuous(labels = scales::label_comma(scale = 1e-0))+
   scale_x_continuous(breaks = seq(min(2000), max(2017), by= 5))+
-  facet_wrap(~Entity, scales =  "free_y", nrow = 3)
+  facet_wrap(~Entity, scales =  "free", nrow = 3)
   
 
 ggplotly(trend_country_cf2)
