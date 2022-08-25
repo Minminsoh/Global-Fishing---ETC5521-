@@ -5,11 +5,9 @@ author:
 - Rohan Baghel
 date: "`r Sys.Date()`"
 output:
-  html_document:
+   bookdown::html_document2:
     toc: yes
     df_print: paged
-  bookdown::html_document2:
-    toc: yes
     number_sections: yes
 team: EMU
 subtitle: Global Fishing
@@ -53,6 +51,7 @@ library(transformr)
 library(gifski)
 library(viridis)
 library(png)
+library(plotly)
 ```
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
@@ -70,7 +69,7 @@ The data set has been obtained from the website https://ourworldindata.org. The 
 
 The data dictionary for the data set has been given below. They define the variables and their types in each of the data sets that has been given in the data set. 
 
-# `aquaculture-farmed-fish-production.csv`
+## `aquaculture-farmed-fish-production.csv`
 
 |variable                             |class     |description |
 |:------------------------------------|:---------|:-----------|
@@ -79,7 +78,7 @@ The data dictionary for the data set has been given below. They define the varia
 |Year                                 |double    |.           |
 |Aquaculture production (metric tons) |double    |.           |
 
-# `capture-fisheries-vs-aquaculture.csv`
+## `capture-fisheries-vs-aquaculture.csv`
 
 |variable                                   |class     |description |
 |:------------------------------------------|:---------|:-----------|
@@ -89,7 +88,7 @@ The data dictionary for the data set has been given below. They define the varia
 |Aquaculture production (metric tons)       |double    | Production of aquaculture animals|
 |Capture fisheries production (metric tons) |double    | Captured aquaculture |
 
-# `capture-fishery-production.csv`
+## `capture-fishery-production.csv`
 
 |variable                                   |class     |description |
 |:------------------------------------------|:---------|:-----------|
@@ -98,7 +97,7 @@ The data dictionary for the data set has been given below. They define the varia
 |Year                                       |double    | Year |
 |Capture fisheries production (metric tons) |double    | Captured fisheres production |
 
-# `fish-and-seafood-consumption-per-capita.csv`
+## `fish-and-seafood-consumption-per-capita.csv`
 
 |variable                                                       |class     |description |
 |:--------------------------------------------------------------|:---------|:-----------|
@@ -107,7 +106,7 @@ The data dictionary for the data set has been given below. They define the varia
 |Year                                                           |double    | Year |
 |Fish, Seafood- Food supply quantity (kg/capita/yr) (FAO, 2020) |double    | Average supply of fish and seafood across the population, measured in kilograms per person per year.|
 
-# `fish-stocks-within-sustainable-levels.csv`
+## `fish-stocks-within-sustainable-levels.csv`
 
 |variable                                                                |class     |description |
 |:-----------------------------------------------------------------------|:---------|:-----------|
@@ -118,7 +117,7 @@ The data dictionary for the data set has been given below. They define the varia
 |Share of fish stocks that are overexploited                             |double    | Share of fish stock that are overexploited |
 
 
-# `global-fishery-catch-by-sector.csv`
+## `global-fishery-catch-by-sector.csv`
 
 |variable                            |class     |description |
 |:-----------------------------------|:---------|:-----------|
@@ -131,7 +130,7 @@ The data dictionary for the data set has been given below. They define the varia
 |Recreational                        |double    | Recreational fishing |
 |Subsistence                         |double    | Food caught to feed self/family |
 
-# `seafood-and-fish-production-thousand-tonnes.csv`
+## `seafood-and-fish-production-thousand-tonnes.csv`
 
 |variable                                      |class     |description |
 |:----------------------------------------------|:---------|:-----------|
@@ -152,7 +151,7 @@ The data dictionary for the data set has been given below. They define the varia
 
 Q1 What is the contribution of each production sector in global fishery from 1950 ? 
 
-Q2 ** What is the contribution of each country in the global fishery sector ? ** 
+Q2 **What is the contribution of each country in the global fishery sector ?** 
 
 Q3 What is the share of type of fishes produced in each country ? 
 
@@ -160,11 +159,11 @@ Q4 What is the production level of each country by capturing over the years ?
 
 Q5 What is the production level of each country by farming over the years  ?
 
-Q6 ** What has been the trend of seafood consumption of each country over the years ? ** - 
+Q6 **What has been the trend of seafood consumption of each country over the years ?** - 
 
-Q7 ** What has been the trend of captured vs farmed production of each country over the years ? **   
+Q7 **What has been the trend of captured vs farmed production of each country over the years ?**   
 
-Q8 ** What has been the trend of sustainable levels of fish stocks in the world ? ** -   
+Q8 **What has been the trend of sustainable levels of fish stocks in the world ?** -   
 
 Q9 What is the share of fishes of the that have been been overexploited in the world over the years ? 
 
@@ -233,12 +232,12 @@ as indexing. It gives the relative worth of a 2003 dollar at each point in time 
 easy to read the effect of inflation from the graph:
 -- price deciles for each month. Relative change to initial value
 
-## What has been the trend of seafood consumption of each country over the years ? ** 
+## **What has been the trend of seafood consumption of each country over the years ?** 
 
-For a broad overview of the changes in seafood consumption, we'll start with the evolution of the average seafood consumption in the world over the years. 
+For a broad overview of the changes in seafood consumption, we'll start with the evolution of the average seafood consumption in the world over the years.
 
 ### Annual seafood consumption in the World over the years 
-```{r}
+```{r echo=FALSE}
 # Compute annual average consumption 
 consumption <- consumption %>% rename(consumption = `Fish, Seafood- Food supply quantity (kg/capita/yr) (FAO, 2020)`)
 
@@ -246,12 +245,12 @@ annual_consumption <- consumption %>% group_by(Year) %>%
   summarise(av_consumption = mean(consumption, na.rm=TRUE))
 ```
 
-```{r worldconsumption,  echo=FALSE, preserve = TRUE, fig.pos = 'H', out.extra = "", fig.cap = "Average seafood consumption in the world over t"}
+```{r worldconsumption,  echo=FALSE, warning = FALSE, message = FALSE, preserve = TRUE, fig.pos = 'H', out.extra = "", fig.cap = "Average seafood consumption in the world over time"}
 library(plotly)
 p1 <- 
   ggplot(data = annual_consumption,
-         aes(x = Year, y = av_consumption, colour = "red")) +
-  geom_line() +
+         aes(x = Year, y = av_consumption)) +
+  geom_line(colour = "red") +
   labs(y = "Average consumption (kg) per person per year") +
   scale_x_continuous(breaks = seq(min(annual_consumption$Year), max(annual_consumption$Year), by=5))
 
@@ -266,11 +265,27 @@ This simple plot suggest some directions for further exploration. Are these patt
 
 ### Annual average consumption per capita across years 
 
-We've decided to look into the patterns of the 15 countries with the highest average consumption and the 15 countries with the lowest average consumption, as the patterns of the other countries are pretty similar and the plots will be very congested with all countries included.  The 15 countries with the highest average consumption from 1961 to 2017 are summarised in the table \@ref(tab:top15tbl) while table \@ref(tab:low15tbl) contains the list of 15 countries with the lowest average consumption. 
+We've decided to look into the patterns of the 15 countries with the highest average consumption and the 15 countries with the lowest average consumption, as the patterns of the other countries are pretty similar and the plots will be very congested with all countries included. As the original dataset provided contains other regions such as Central Africa Republic and Central America, we've performed an inner join with the dataset called iso3166 from the *maps* package to extract only countries relevant dataset. 
+
+
+
+The 10 countries with the highest average consumption from 1961 to 2017 are summarised in the table \@ref(tab:top10tbl) while table \@ref(tab:low10tbl) contains the list of 15 countries with the lowest average consumption.  On islands with little agricultural land, fish are frequently the primary source of protein, contributing in some small island states to over half of the animal protein intake   
+
+Jensen, Helen H.
+Many lower-income countries rely on subsistence fishing as a key food source.  With higher levels of income, consumers reallocate spending away from “raw” food products to foods that are pre-processed or have services built in.
+significant shift of consumers’ food purchases now going to food processing, preparation and distribution services outside of the consumer’s home. With the notable exception of Japan. everal low income developing countries (such as Indonesia, Bangladesh and the Philippines, consume over 40% of protein from fish sources.  
+
+
+Demographic 
+
+Forty percent of all fishery production is internationally traded; 80% of fish for human consumption goes to the top three developed country markets (Japan, the European Union and the United States) (Bruinsma, 2003).
+Fish and seafood trade is especially important for the export sectors of Sub-Saharan Africa and South Asia. 
+
 
 
 ```{r echo=FALSE}
 #Extract countries from dataset called iso3166 from the {maps} package
+unique(consumption$Entity)
 dat <- iso3166  
 dat <- dat %>% mutate(ISOname = toupper(ISOname)) 
 dat <-  dat %>%rename(Entity = ISOname)
@@ -281,7 +296,7 @@ country_cons <- inner_join(consumption, dat, by = "Entity")
 
 ```
 
-```{r top15tbl, echo=FALSE}
+```{r top10tbl, echo=FALSE}
 #Compute annual average consumption per capita across years 
 
 #Select top 15 countries and lowest 15 countries 
@@ -289,10 +304,10 @@ highest_consumption   <- country_cons %>% group_by(Entity) %>%
   summarise(avg_consumption = mean(consumption ))%>%
   arrange(-avg_consumption)%>%
   mutate(rank = row_number())%>%
-  filter(rank %in% 1:15) %>%
-  rename(`Average Consumption` = avg_consumption)
+  filter(rank %in% 1:10) %>%
+  rename(`Average Consumption (kg) per person per capita` = avg_consumption)
 
-kable(head(highest_consumption,15), caption = "15 countries with the highest consumption") %>% 
+kable(head(highest_consumption,10), caption = "10 countries with the highest consumption") %>% 
   kable_styling(font_size = 15, bootstrap_options = c("striped", "hover", "condensed"))
 
 
@@ -303,23 +318,24 @@ lowest_consumption <- country_cons %>% group_by(Entity) %>%
   summarise(avg_consumption = mean(consumption ))%>%
   arrange(avg_consumption)%>%
   mutate(rank = row_number())%>%
-  filter(rank %in% 1:20)%>%
-  rename(`Average Consumption` = avg_consumption)
+  filter(rank %in% 1:10)%>%
+  rename(`Average Consumption (kg) per person per capita` = avg_consumption)
 
-kable(head(lowest_consumption,15), caption = "15 countries with the lowest consumption") %>% 
+kable(head(lowest_consumption,10), caption = "10 countries with the lowest consumption") %>% 
   kable_styling(font_size = 15, bootstrap_options = c("striped", "hover", "condensed"))
 
 ```
 
-First, we are interested in finding out whether the distribution of consumption for the top 15 countries and the lowest 15 countries are the same. 
+First, we are interested in finding out whether the distribution of consumption from 1961 to 2017 among the 15 countries with the highest consumption are the same. Then, we will investigate the same for the 15 countries with the average lowest consumption across years. 
 
-```{r}
+```{r echo=FALSE}
 #boxplot
 
 library(plotly)
 top10_consumption<- consumption %>% filter(Entity %in% highest_consumption$Entity) 
+
 low10_consumption <- consumption %>% filter(Entity %in% lowest_consumption$Entity) 
-top1 <- ggplot(top15_consumption, 
+top1 <- ggplot(top10_consumption, 
        aes(x = fct_reorder(Entity, consumption, .fun = median),  #.fun? 
            y = consumption)) +
   ggtitle("Boxplot on the seafood distribution per capita ")+
@@ -328,7 +344,7 @@ top1 <- ggplot(top15_consumption,
   labs(x = "Country",
        y = "Consumption (kg) per person per year ")
 
-top2<- ggplot(top15_consumption,
+top2<- ggplot(top10_consumption,
        aes(x = consumption, 
            y = fct_reorder(Entity,consumption ))) +
   geom_density_ridges(alpha = 0.6, fill = "steelblue")+
@@ -336,23 +352,29 @@ top2<- ggplot(top15_consumption,
        x = "Consumption (kg) per person per year ")
 
 
+```
+
+```{r top-distplot, fig.cap=" Box plot and Density plot showing the distribution of average consumption per person per capita (kg) across years among the 15 countries with the highest consumption.", echo=FALSE}
+
 ggplotly(top1, tooltip="text")
+
 top2
 
 
-#Geographic differences - distribution of consumption for top 15 countries and lowest 15 countries 
 ```
 
 Portugal : SMALL DIStribution, with some outliers  
 Norway : small distribution 
 Maldives : massive distribution
 
+Figures \@ref(fig:top-distplot) illustrates the seafood distribution per capita from 1961 to 2017. Maldives is the country with the widest dispersion of seafood consumption over time ranging from 13.19kg per person per year to 191.75kg per person per year. Countries such as Japan, Kiribati and Norway are not dispersed, which means that the average seafood consumption over time do not vary much as compared to the countries. 
 
+It's worth noting that Portugal's boxplot displays some outliers falling outside the quartiles, where one of the year the average consumption is significantly higher  at 71.48kg per person. 
 
 ```{r}
 # Ridge line plot
 
-low1 <- ggplot(low15_consumption, 
+low1 <- ggplot(low10_consumption, 
        aes(x = fct_reorder(Entity, consumption, .fun = median),  #.fun? 
            y = consumption)) +
   geom_boxplot() + 
@@ -360,12 +382,11 @@ low1 <- ggplot(low15_consumption,
   labs(x = "Country",
        y = "Consumption (kg) per person per year ")
 
-low2 <- ggplot(low15_consumption,
+low2 <- ggplot(low10_consumption,
        aes(x = consumption, 
            y = fct_reorder(Entity,consumption ))
        ) +
   geom_density_ridges(alpha = 0.6, fill = "steelblue")+
-  +
   labs(x = "Country",
        y = "Consumption (kg) per person per year ")
 
@@ -373,13 +394,13 @@ ggplotly(low1 , tooltip="text")
 low2
 ```
 
-## trend in consumption for top 15 nations & lowest 15 nations 
+
 
 
 ```{r}
 mapdata <- map_data("world") %>% 
   mutate(Entity = toupper(region))
-country_cons %>% rename
+
 
 country_map <- inner_join(mapdata, country_cons, by = "Entity")
 
@@ -388,8 +409,11 @@ country_map %>% ggplot(aes(x = long, y = lat, group = group )) +
 
 ```
 
+### Geographic Differences : Trend in seafood consumption for top 10 nations & lowest 10 nations 
 
-```{r countryconsumption1,  echo=FALSE, preserve = TRUE, fig.pos = 'H', out.extra = "", fig.cap = "Average seafood consumption in the world over t"}
+In this section we explore the changes in seafood consumption over time in the 10 countries with the highest average seafood consumption. Recall that in our earlier discussion of seafood consumption trend in the world where we observe a decrease in 1989. We then insert a vertical dashed line at the point where year is 1989 for comparison purposes.  
+
+```{r countryconsumption1,  echo=FALSE, preserve = TRUE, fig.pos = 'H', out.extra = "", fig.cap = "Seafood consumption among the top 10 countries over time"}
 #trend in consumption for top 10 nations
 library(plotly)
 
@@ -402,18 +426,6 @@ top3 <- ggplot(data = top10_consumption,
   ggtitle("Seafood consumption per capita per person per year (kg)")+
   scale_x_continuous(breaks = seq(min(annual_consumption$Year), max(annual_consumption$Year), by=10))
 
-ggplot(data = top10_consumption,
-         aes(x = Year, y = consumption, colour = Entity)) +
-  geom_path()+
-  geom_line()+
-  geom_vline(xintercept= 1989, colour = "grey", linetype = "dashed")+
-   labs(y = "Average consumption (kg) per year") +
-  ggtitle("Seafood consumption per capita per person per year (kg)")+
-  scale_x_continuous(breaks = seq(min(annual_consumption$Year), max(annual_consumption$Year), by=10))
-
-
-
-
 plot.animation= top3+
 transition_reveal(Year)+
 view_follow(fixed_y=T)
@@ -424,37 +436,29 @@ anim_save("Seafood consumption per capita.gif")
 ```
 
 
-```{r}
-top4 <- ggplot(data = top15_consumption,
+```{r countryconsumption1,  echo=FALSE, preserve = TRUE, fig.pos = 'H', out.extra = "", fig.cap = "Seafood consumption among the top 10 countries over time.  This plot is the same as previous plot but it allows interative plot elements. "}
+ggplotly(top3)  
+
+```
+
+
+```{r countryconsumption3,  echo=FALSE, preserve = TRUE, fig.pos = 'H', out.extra = "", fig.cap = "Individual plots of the seafood consumption over time among the top 10 countries" }
+
+top4 <- ggplot(data = top10_consumption,
          aes(x = Year, y = consumption)) +
   geom_path()+
   geom_line() +
   geom_vline(xintercept= 1989, colour = "grey", linetype = "dashed")+
-  labs(y = "Average consumption (kg) per year") +
-  ggtitle("Seafood consumption per capita per person per year (kg)")+
-  scale_x_continuous(breaks = seq(min(top15_consumption$Year), max(top15_consumption$Year), by=20))+
-  scale_y_continuous(breaks = seq(min(top15_consumption$consumption), max(top15_consumption$consumption), by=50))+
+  labs(y = "Seafood consumption per capita per person per year (kg)") +
+  scale_x_continuous(breaks = seq(min(top15_consumption$Year), max(top15_consumption$Year), by=15))+
+  scale_y_continuous(breaks = seq(min(top15_consumption$consumption), max(top15_consumption$consumption), by=30))+
   facet_wrap(~Entity)
 
-
-ggplotly(top3)  
 ggplotly(top4)
 ```
 
-There is considerable diversity in seafood supply among the regions of the world. As shown in figure \@ref(fig:countryconsumption1) , the supply or consumption were the highest in Maldives, followed by Iceland, Kiribati and Japan lowest in . In contrast, per  
- The highest seafood consumers are countries including Iceland, the Maldives and Hong Kong
-Contrast that with those at the bottom of the table:
+There is considerable variation in seafood consumption trend among top 10 countries. As shown in figure \@ref(fig:countryconsumption2) and figure \@ref(fig:countryconsumption3), we observe an increasing trend from 1961 to 1989 for most of the countries except for Portugal where there's a sharp decrease in 1969. Interestingly, some of the countries like Hong Kong and Malaysia display an increasing trend in 1989 where the other countries are showing a decreasing trend in the seafood consumption, similar to what we have observed previously in the world trend in figure \@ref(fig:worldconsumption). This is mainly associated with the improvements of economic conditions in Asia in 1988 along with the recovery of production where food production as a whole remained stable and price inflation remained moderate (Food and Agricultural Organisation of the United Stations, 1989). Notably, seafood consumption in Maldives is the highest compared to the other nations and the trend fluctuates overtime. Fisheries sector has been a contributing sector for Maldives in employment, exports and food security. The trend is declining after 2010, due to a combination of factors, including overfishing, employment falling and higher fuel costs (Salinas, E., Van Doorn, R., & Redaelli, S. (2015)). Solomon islands and Japan also show a declining trend in seafood consumption too, which are mainly due to the overfishing problem.  Overall, these 10 countries display a different result to our expectations, even though some countries are showing an increasing trend in seafood consumption, there are others which show a decline in consumption. 
 
-
-Jensen, Helen H.
-Many lower-income countries rely on subsistence fishing as a key food source.  With higher levels of income, consumers reallocate spending away from “raw” food products to foods that are pre-processed or have services built in.
-significant shift of consumers’ food purchases now going to food processing, preparation and distribution services outside of the consumer’s home. With the notable exception of Japan. everal low income developing countries (such as Indonesia, Bangladesh and the Philippines, consume over 40% of protein from fish sources.  
-
-
-Demographic 
-
-Forty percent of all fishery production is internationally traded; 80% of fish for human consumption goes to the top three developed country markets (Japan, the European Union and the United States) (Bruinsma, 2003).
-Fish and seafood trade is especially important for the export sectors of Sub-Saharan Africa and South Asia. 
 
 
 - china - imported - seafood supply 
@@ -597,9 +601,9 @@ trend_country_cf <- country_cf %>% filter (Year >= 2000) %>%
   labs(x = "Year", y = "Aquaculture production (metric tons)")+
   scale_y_continuous(trans = scales::log_trans(),
                      labels = scales::label_comma(scale = 1e-0))
-                     breaks = seq(min(country_cf$aquaculture), max(country_cf$aquaculture), by=100000)
 
-trend_country_cf
+
+ trend_country_cf
 
 ```
 
@@ -613,7 +617,7 @@ country_cf %>% filter (Year >= 2000) %>%
   geom_line()+
   ggtitle("Trend in aquaculture for the top 10 countries")+
   labs(x = "Year", y = "Aquaculture production (metric tons)")+
-  scale_y_continuous(labels = scales::label_comma(scale = 1e-0))
+  scale_y_continuous(labels = scales::label_comma(scale = 1e-0))+
   facet_wrap(~Entity)
 
 ```
@@ -632,3 +636,7 @@ Dumas, M. W. (1992). Productivity trends: prepared fish and seafoods industry. M
 Hosomi, R., Yoshida, M., & Fukunaga, K. (2012). Seafood consumption and components for health. Global journal of health science, 4(3), 72.
 
 Jensen, Helen H. "Changes in seafood consumer preference patterns and associated changes in risk exposure." Marine Pollution Bulletin 53.10-12 (2006): 591-598.
+
+Bennett, A., Patil, P., Kleisner, K., Rader, D., Virdin, J., & Basurto, X. (2018). Contribufion of fisheries to food and nutrifion security: Current knowledge, policy, and research.
+
+Salinas, E., Van Doorn, R., & Redaelli, S. (2015). Maldives: Identifying Opportunities and Constraints to Ending Poverty and Promoting Shared Prosperity.
