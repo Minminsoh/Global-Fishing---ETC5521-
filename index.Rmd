@@ -236,7 +236,6 @@ The 10 countries with the highest average consumption from 1961 to 2017 are summ
 
 ```{r echo=FALSE}
 #Extract countries from dataset called iso3166 from the {maps} package
-unique(consumption$Entity)
 dat <- iso3166  
 dat <- dat %>% mutate(ISOname = toupper(ISOname)) 
 dat <-  dat %>%rename(Entity = ISOname)
@@ -348,7 +347,11 @@ In figure  \@ref(fig:cf1), we can observe the change in capture fishery producti
 captured_vs_farmed  <- captured_vs_farmed %>% 
   rename(aquaculture = `Aquaculture production (metric tons)`,
          captured = `Capture fisheries production (metric tons)`)
+
+captured_vs_farmed<- captured_vs_farmed %>% mutate(Entity = toupper(Entity))
+
 country_cf <- inner_join(captured_vs_farmed, dat, by = "Entity")
+
 captured_vs_farmed_long  <- captured_vs_farmed %>% pivot_longer(cols = aquaculture:captured,
                                                            names_to = "production_type",
                                                            values_to = "production")
@@ -356,7 +359,7 @@ captured_vs_farmed_long  <- captured_vs_farmed %>% pivot_longer(cols = aquacultu
 
 ```{r cf1, echo=FALSE, , preserve = TRUE, fig.pos = 'H', out.extra = "", fig.cap = "Captured fishery production VS Aquaculture in the world"}
 # Captured vs Farmed trend in the world 
-world_cap_farm <- captured_vs_farmed_long %>% filter(Entity =="World") 
+world_cap_farm <- captured_vs_farmed_long %>% filter(Entity =="WORLD") 
 cap_farm_trend <- 
 ggplot(world_cap_farm , aes(x = Year, y = production, colour = production_type ))+
   geom_path()+
@@ -397,11 +400,15 @@ avg_contribution <- country_cf %>%
   mutate(across(avg_captured:avg_aquaculture, ~ scales::label_comma()(.x))) %>%
   rename(`Average wild fish caught (metric tons)` = avg_captured,
          `Average aquaculture (metric tons)` = avg_aquaculture)
-kable(head(avg_contribution,10), caption = "Top 10 countries for Aquaculture Production") %>% kable_styling(font_size = 15, bootstrap_options = c("striped", "hover", "condensed"))
+
+
+kable(head(avg_contribution,10), caption = "Top 10 countries for Aquaculture Production")%>% 
+  kable_styling(font_size = 15, bootstrap_options = c("striped", "hover", "condensed"))
+
 ```
 
 
-```{r table2, echo=FALSE, preserve = TRUE, fig.pos = 'H', out.extra = ""}
+```{r table2, echo=FALSE}
 # Compute the top 10 countries that produce the most aquaculture from 2000 onwards 
 world_aqua <- world_cap_farm %>% filter (Year == 2015,
                                          production_type == "aquaculture")
@@ -415,29 +422,34 @@ aqua2015 <- country_cf %>%
   mutate_if(is.numeric, round, digits = 2)%>%
   rename(`Percentage relative to world production` = percentage)
   
-kable(head(aqua2015,10), caption = "Aquaculture production in 2015 relative to the world's among the top 10 countries") %>% kable_styling(font_size = 15, bootstrap_options = c("striped", "hover", "condensed"))
+kable(head(aqua2015,10), caption = "Top 10 countries for Aquaculture Production") %>% 
+  kable_styling(font_size = 15, bootstrap_options = c("striped", "hover", "condensed"))
 ```
 
 ### Trend of captured fishery production VS Aquaculture over time among the top 10 countries
 
-```{r cf3, echo=FALSE, , preserve = TRUE, fig.pos = 'H', out.extra = "", fig.cap = "Individual plots of the captured fishery production VS Aquaculture over time among the top 10 countries"}
+```{r cf3, echo=FALSE, , preserve = TRUE, fig.pos = 'H', out.extra = "", fig.width = 15, fig.cap = "Individual plots of the captured fishery production VS Aquaculture over time among the top 10 countries"}
+
+
 cf_data_long <- captured_vs_farmed_long  %>% filter (Year >= 2000) %>%
   mutate(Entity = toupper(Entity)) %>%
   filter (Entity %in% c(avg_contribution$Entity))
 
-
 trend_country_cf2 <- cf_data_long%>%
   ggplot(aes(x = Year,
-           y = production,
+           y = (production/1000000),
            colour = production_type))+
   geom_line()+
-  labs(x = "Year", y = "Production (metric tons)")+
+  labs(x = "Year", y = "Production (metric tons in millions)")+
   scale_y_continuous(labels = scales::label_comma(scale = 1e-0))+
-  scale_x_continuous(breaks = seq(min(2000), max(2017), by= 5))+
-  facet_wrap(~ Entity, scales =  "free", nrow = 3)
-  
+  scale_x_continuous(breaks = seq(2000, 2017, by= 10))+ facet_wrap(~ Entity, scales =  "free", nrow = 4)
+
+ggplotly(trend_country_cf2)
+
+
 
 ```
+
 
 Aquaculture production within each region is diverse. In figure \@ref(fig:cf3), most countries display an increasing trend in aquaculture production, especially in the Asia region, including China, India, Indonesia, Philippines and Vietnam. This pattern is consistent with our initial expectation, not to mention that aquaculture production has also surpassed the wild fish captured in these countries in the recent years.  In contrast, some countries are still relying more on the fisheries compared to aquaculture at the recent stage, including Japan, United States, Peru and Chile.  
 
