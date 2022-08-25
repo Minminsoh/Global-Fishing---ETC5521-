@@ -7,8 +7,12 @@ author:
   - [Rohan Baghel]
 
 date: "`r Sys.Date()`"
-output: 
-  html_document
+output:
+   bookdown::html_document2:
+    toc: yes
+    df_print: paged
+    number_sections: yes
+    fig_caption: yes
 ---
 
 [This assignment is for ETC5521 Assignment 1 by Team `r rmarkdown::metadata$team` comprising of `r knitr::combine_words(rmarkdown::metadata$author)`.]{style="color:#006DAE;"}
@@ -33,6 +37,8 @@ We begin by describing the data in the next section, how we source it and how we
 library(tidyverse)
 library(ggplot2)
 library(tidytuesdayR)
+library(plotly)
+library(bookdown)
 ```
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
@@ -137,7 +143,7 @@ The data dictionary for the data set has been given below. They define the varia
 
 Q1 What is the contribution of each production sector in global fishery from 1950 ? 
 
-Q2 ** What is the contribution of each country in the global fishery sector ? ** 
+Q2 **What is the contribution of each country in the global fishery sector ? ** 
 
 Q3 What is the share of type of fishes produced in each country ? 
 
@@ -145,11 +151,11 @@ Q4 What is the production level of each country by capturing over the years ?
 
 Q5 What is the production level of each country by farming over the years  ?
 
-Q6 ** What has been the trend of seafood consumption of each country over the years ? ** - 
+Q6 **What has been the trend of seafood consumption of each country over the years ? ** 
 
-Q7 ** What has been the trend of captured vs farmed production of each country over the years ? **   
+Q7 **What has been the trend of captured vs farmed production of each country over the years ? **   
 
-Q8 ** What has been the trend of sustainable levels of fish stocks in the world ? ** -   
+Q8 **What has been the trend of sustainable levels of fish stocks in the world ? **   
 
 Q9 What is the share of fishes of the that have been been overexploited in the world over the years ? 
 
@@ -204,7 +210,194 @@ Q20 How much fresh water produce in each country over time ?
 
 # Analysis and findings
 
-[FILL] Should include at least one plot or numerical summary for each of your questions, that helps the reader arrive at an answer. You should also write paragraphs describing the methods, summaries and findings. 
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+
+production_cleaned <- production %>%
+  mutate( Pelagic_fish = production$`Commodity Balances - Livestock and Fish Primary Equivalent - Pelagic Fish - 2763 - Production - 5510 - tonnes`,
+          Crustaceans = production$`Commodity Balances - Livestock and Fish Primary Equivalent - Crustaceans - 2765 - Production - 5510 - tonnes`,
+          Cephalopods = production$`Commodity Balances - Livestock and Fish Primary Equivalent - Cephalopods - 2766 - Production - 5510 - tonnes`,
+          Demersal_fish = production$`Commodity Balances - Livestock and Fish Primary Equivalent - Demersal Fish - 2762 - Production - 5510 - tonnes`,
+          Freshwater_fish = production$`Commodity Balances - Livestock and Fish Primary Equivalent - Freshwater Fish - 2761 - Production - 5510 - tonnes`,
+          Molluscs_Others = production$`Commodity Balances - Livestock and Fish Primary Equivalent - Molluscs, Other - 2767 - Production - 5510 - tonnes`,
+          Marine_fish_other = production$`Commodity Balances - Livestock and Fish Primary Equivalent - Marine Fish, Other - 2764 - Production - 5510 - tonnes`) %>%
+  select(-`Commodity Balances - Livestock and Fish Primary Equivalent - Pelagic Fish - 2763 - Production - 5510 - tonnes`,
+         -`Commodity Balances - Livestock and Fish Primary Equivalent - Crustaceans - 2765 - Production - 5510 - tonnes`,
+        -`Commodity Balances - Livestock and Fish Primary Equivalent - Cephalopods - 2766 - Production - 5510 - tonnes`,
+        -`Commodity Balances - Livestock and Fish Primary Equivalent - Demersal Fish - 2762 - Production - 5510 - tonnes`,
+        -`Commodity Balances - Livestock and Fish Primary Equivalent - Freshwater Fish - 2761 - Production - 5510 - tonnes`,
+        -`Commodity Balances - Livestock and Fish Primary Equivalent - Molluscs, Other - 2767 - Production - 5510 - tonnes`,
+        -`Commodity Balances - Livestock and Fish Primary Equivalent - Marine Fish, Other - 2764 - Production - 5510 - tonnes`)
+  
+
+```
+
+```{r message=FALSE, warning=FALSE}
+production_total <- production_cleaned %>%
+  group_by(Entity) %>%
+  summarise(Total = sum(Pelagic_fish, 
+                        Crustaceans,
+                        Cephalopods,
+                        Demersal_fish,
+                        Freshwater_fish,
+                        Molluscs_Others,
+                        Marine_fish_other,
+                        na.rm = T
+                        ))
+```
+
+The data from "production.csv" had to be wrangled to make the best use of the data-set. The variables had to be renamed and total fish production had to be calculated to find the top producers of fish in the world. 
+
+```{r production, message=FALSE, warning=FALSE, fig.cap="Top fish producers of the world", fig.align='center'}
+production_bar <- plot_ly(production_total,
+                          x = ~Entity,
+                          y = ~Total,
+                          type = 'bar',
+                          barmode = 'stack'
+                          ) %>% 
+  layout(xaxis = list(title = 'Year',categoryorder = "total ascending", tickangle = 45),
+         yaxis = list(title = 'Fish Production (Tonnes)'),
+         title = "Top fish producers of the world"
+         )
+
+production_bar
+```
+
+From the Figure \@ref(fig:production)) we can see the top producers in the world. If we exclude the continental observations and group of countries according to their economic development we can see that China,Japan,Peru and United States have been the top producers of the world. These countries have very large coastal regions, and are able to exploit them to their advantage. Another benefit of having a large coastal region is that these countries have high consumption of fish and most of their cuisine is based around fish. 
+
+Similarly we can see that, the countries that are at the bottom of the fish production table are the arid regions of the world. These countries include Lesotho, Kyrgyzstan, Tajikistan and Jordan. They have very few sources of water and mostly consume meat to supplement their diet.
+
+These findings are within expectations of initial analysis. Countries having a very large coastal line are more dependent on fish for their diet and can even sell them in the international market while the land locked and dry regions have a very minuscule share of fish production in the world.
+
+```{r type, message=FALSE, warning=FALSE, fig.cap="Fish Production in the World", fig.align='center'}
+production_plot <- plot_ly(production_cleaned,
+                           type = 'scatter',
+                           mode = 'markers') %>%
+  layout(xaxis = list(title = 'Year'),
+         yaxis = list(title = 'Fish Production (Tonnes)'),
+         title = "Fish Production in the World",
+         legend = list(title=list(text='<b> Type of Fish </b>'))
+         )
+  
+
+production_plot <- production_plot %>%
+  add_trace(x = production_cleaned$Year,
+            y = production_cleaned$Pelagic_fish,
+            marker = list(color = production_cleaned$Entity),
+            hoverinfo = production_cleaned$Entity,
+            showlegend = T,
+            hoverinfo = 'text',
+            text = ~paste('Country/Continent:', Entity),
+            name = "Pelagic Fish")
+
+production_plot <- production_plot %>% 
+  add_trace( x = production_cleaned$Year,
+             y = production_cleaned$Crustaceans, 
+             mode = 'markers',
+             showlegend = T,
+             hoverinfo = 'text',
+             text = ~paste('Country/Continent:', Entity),
+             name = "Crustaceans")
+
+production_plot <- production_plot %>% 
+  add_trace( x = production_cleaned$Year,
+             y = production_cleaned$Cephalopods, 
+             mode = 'markers',
+             showlegend = T,
+             hoverinfo = 'text',
+             text = ~paste('Country/Continent:', Entity),
+             name = "Cephalopods")
+
+production_plot <- production_plot %>% 
+  add_trace( x = production_cleaned$Year,
+             y = production_cleaned$Demersal_fish, 
+             mode = 'markers',
+             showlegend = T,
+             hoverinfo = 'text',
+             text = ~paste('Country/Continent:', Entity),
+             name = "Demersal Fish")
+
+production_plot <- production_plot %>% 
+  add_trace( x = production_cleaned$Year,
+             y = production_cleaned$Freshwater_fish, 
+             mode = 'markers',
+             showlegend = T,
+             hoverinfo = 'text',
+             text = ~paste('Country/Continent:', Entity),
+             name = "Freshwater Fish")
+
+production_plot <- production_plot %>% 
+  add_trace( x = production_cleaned$Year,
+             y = production_cleaned$Molluscs_Others, 
+             mode = 'markers',
+             showlegend = T,
+             hoverinfo = 'text',
+             text = ~paste('Country/Continent:', Entity),
+             name = "Molluscs and others")
+
+production_plot <- production_plot %>% 
+  add_trace( x = production_cleaned$Year,
+             y = production_cleaned$Marine_fish_other, 
+             mode = 'markers',
+             showlegend = T,
+             hoverinfo = 'text',
+             text = ~paste('Country/Continent:', Entity),
+             name = "Marine Fish and others")
+
+production_plot
+```
+
+From the Figure \@ref(fig:type)), we can observe the trend of fish production in the world according to the types of fishes that are being consumed around the world. **"Freshwater fishes"** and **"pelagic fishes"** make up the majority of fish production in the world while **"marine fish"** and **"cephalopods"** are at the bottom of fish production trend.
+
+It is clear that the fish production has always shown a upward trend and the majority of fish that is being consumed around the world is from freshwater sources or from pelagic zones of the oceans. 
+
+This trend does not deviate from expectation, as the population growth will always demand more seafood for consumption. It is a little unexpected that the majority of the food production is based around freshwater fishes while marine fish are at the bottom of the table.
+
+```{r message=FALSE, warning=FALSE}
+stock_world <- stock %>% 
+  mutate(Sustainable_levels_Fish = stock$`Share of fish stocks within biologically sustainable levels (FAO, 2020)`,
+         Overexploited_Fish = stock$`Share of fish stocks that are overexploited`) %>%
+  select(-`Share of fish stocks within biologically sustainable levels (FAO, 2020)`,
+         -`Share of fish stocks that are overexploited`) %>%
+  slice(31:51)
+```
+
+The data from "stock.csv" had to be wrangled to remove irrelevant observations and the names of the variables had to be changed to make the data-set more presentable and easy to use.
+
+```{r stock, message=FALSE, warning=FALSE, fig.cap= "Fish stock of the world", fig.align='center'}
+stock_plot <- plot_ly(stock_world,
+                           type = 'scatter',
+                           mode = 'markers') %>% 
+  layout(xaxis = list(title = 'Year',categoryorder = "total ascending"),
+         yaxis = list(title = 'Fish Stock (percent)'),
+         title = "Fish stock of the world",
+         legend = list(title=list(text='<b> Fish stock type </b>'))
+         )
+  
+
+stock_plot <- stock_plot %>%
+  add_trace(x = stock_world$Year,
+            y = stock_world$Sustainable_levels_Fish,
+            mode='lines+markers',
+            showlegend = T,
+            hoverinfo = 'text',
+            text = ~paste('Country/Continent:', Entity),
+            name = "Sustainable Levels of Fish Stock")
+
+stock_plot <- stock_plot %>%
+  add_trace(x = stock_world$Year,
+            y = stock_world$Overexploited_Fish,
+            mode='lines+markers',
+            showlegend = T,
+            hoverinfo = 'text',
+            text = ~paste('Country/Continent:', Entity),
+            name = "Overexploited Fish Stock ")
+
+stock_plot
+```
+
+From the Figure \@ref(fig:stock)), we can observe the trend of fish exploitation and sustainable levels in the world. It is evident from the trend of from the plot that the sustainable level of fish has been going downwards for a very long time due to over exploitation of fish stocks.
+
+Since these two variables complement each other , we can observe that when one increases the other decreases and vice versa.
 
 # References
 
