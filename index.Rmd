@@ -597,6 +597,9 @@ stock_world <- stock %>%
   select(-`Share of fish stocks within biologically sustainable levels (FAO, 2020)`,
          -`Share of fish stocks that are overexploited`) %>%
   slice(31:51)
+
+kable(head(stock_world,10), caption = "Fish Stocks in the World") %>% 
+  kable_styling(font_size = 15, bootstrap_options = c("striped", "hover", "condensed"))
 ```
 
 The data from "stock.csv" had to be wrangled to remove irrelevant observations and the names of the variables had to be changed to make the data-set more presentable and easy to use.
