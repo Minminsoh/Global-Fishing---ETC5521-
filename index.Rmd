@@ -579,7 +579,8 @@ stock_world <- stock %>%
          Overexploited_Fish = stock$`Share of fish stocks that are overexploited`) %>%
   select(-`Share of fish stocks within biologically sustainable levels (FAO, 2020)`,
          -`Share of fish stocks that are overexploited`) %>%
-  slice(31:51)
+  slice(31:51) %>% 
+  select(-Code)
 
 kable(head(stock_world,10), caption = "Fish Stocks in the World") %>% 
   kable_styling(font_size = 15, bootstrap_options = c("striped", "hover", "condensed"))
