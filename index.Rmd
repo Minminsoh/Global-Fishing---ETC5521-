@@ -489,7 +489,7 @@ production_bar <- plot_ly(production_total,
 production_bar
 ```
 
-From the Figure \@ref(fig:production)) we can see the top producers in the world. If we exclude the continental observations and group of countries according to their economic development we can see that China,Japan,Peru and United States have been the top producers of the world. These countries have very large coastal regions, and are able to exploit them to their advantage. Another benefit of having a large coastal region is that these countries have high consumption of fish and most of their cuisine is based around fish. 
+From the Figure \@ref(fig:production) we can see the top producers in the world. If we exclude the continental observations and group of countries according to their economic development we can see that China,Japan,Peru and United States have been the top producers of the world. These countries have very large coastal regions, and are able to exploit them to their advantage. Another benefit of having a large coastal region is that these countries have high consumption of fish and most of their cuisine is based around fish. 
 
 Similarly, the countries that are at the bottom of the fish production table are the arid regions of the world. These countries include Lesotho, Kyrgyzstan, Tajikistan and Jordan. They have very few sources of water and mostly consume meat to supplement their diet.
 
@@ -565,7 +565,7 @@ production_plot <- production_plot %>%
 production_plot
 ```
 
-From figure \@ref(fig:type)), we can observe the trend of fish production in the world according to the types of fishes that are being consumed around the world. **"Freshwater fishes"** and **"pelagic fishes"** make up the majority of fish production in the world while **"marine fish"** and **"cephalopods"** are at the bottom of fish production trend.
+From figure \@ref(fig:type), we can observe the trend of fish production in the world according to the types of fishes that are being consumed around the world. **"Freshwater fishes"** and **"pelagic fishes"** make up the majority of fish production in the world while **"marine fish"** and **"cephalopods"** are at the bottom of fish production trend.
 
 It is clear that the fish production has always shown a upward trend and the majority of fish that is being consumed around the world is from freshwater sources or from pelagic zones of the oceans. 
 
