@@ -28,14 +28,14 @@ knitr::opts_chunk$set(echo = FALSE,
 
 # Introduction and motivation
 
-Global fishing has received a great deal of attention in the media for the past decades. The rise of world population over the decades have increased the demand for seafood consumption across the world. Coastal countries such as Iceland and Maldives still mainly rely on fishing as one of the most important food sources.  In this analysis, our first research question would learn about the seafood consumption of each country across the years. We will also study about how much seafood are being produced by each country overtime.  
+Global fishing receives a great deal of attention in the media for the past decades. The rise of world population has increased the demand for seafood across the world. Coastal countries mainly rely on fishing as one of the most important food sources. Our first research question would learn about seafood consumption of countries over time. We’ll also study about how much seafood are being produced by each country overtime.
 
-Meanwhile, the rise of seafood demands has increased pressure on fish stocks across the world. The health of fish population in the world remains as a concern with the rise of global fishing. There are claims that ongoing erosion of aqua diversity will eventually lead to global collapse of fisheries by 2048. It then prompts us to have a closer look at how much of fish stocks are caught within the sustainable levels over the years without overexploiting the fish populations.
+Meanwhile, the health of fish population in the world remains as a concern with the rise of global fishing. It then prompts us to assess how much of fish stocks are caught within the sustainable levels over the years without over exploiting the fish populations.
 
-Fish farming, also being known as aquaculture come into place, help to contribute to the seafood production  while alleviating the pressure of wild fisheries. This inspires us to further analyse the change in the trend of aquaculture as compared to wild fish catch over time. 
+Fish farming (or ‘aquaculture’)helps to contribute to the seafood production while alleviating the pressure of wild fisheries. This inspires us to further analyse the trend of aquaculture as compared to wild fish catch over time.
 
-We begin by describing the data in the next section, how we source it and how we prepare the data for analysis. In the analysis section, we present our observations through graphical displays. Our main tool is R, a programming language for statistical computing and graphics, which we use to clean, analyse and graph the data.  
-
+We begin by describing the data in the next section, how we source it and how we prepare the data for analysis. In the analysis section, we present our observations through graphical displays. Our main tool is R, a programming language for statistical computing and graphics.
+ 
 
 # Data description 
 
@@ -72,9 +72,9 @@ production <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience
 ```
 
 
-The data set has been obtained from the website https://ourworldindata.org. The data comprises of seven files in the ".csv" format which is machine readable and can be used to analyze the state of fish production and consumption in the world. 
+The data set has been obtained from `tidytuesday` r package or through the website https://ourworldindata.org. The data comprises of four files in the “.csv” format which is machine readable and can be used to analyze the state of fish production and consumption in the world.
+The data dictionary for the data set has been given below. They define the variables and their types in each of the data sets.  
 
-The data dictionary for the data set has been given below. They define the variables and their types in each of the data sets that has been given in the data set. 
 
 
 ## `capture-fisheries-vs-aquaculture.csv`
@@ -133,9 +133,9 @@ Q2 **What is the contribution of each country in the global fishery sector ? **
 
 Q3 What is the share of type of fishes produced in each country ? 
 
-Q4 What is the production level of each country by capturing over the years ?
+Q4 What is the production level of each country by capturing over time ?
 
-Q5 What is the production level of each country by farming over the years  ?
+Q5 What is the production level of each country by farming over time  ?
 
 Q6 **What has been the trend of seafood consumption of each country over the years ? ** 
 
@@ -143,9 +143,9 @@ Q7 **What has been the trend of captured vs farmed production of each country ov
 
 Q8 **What has been the trend of sustainable levels of fish stocks in the world ? **   
 
-Q9 What is the share of fishes of the that have been been overexploited in the world over the years ? 
+Q9 What is the share of fishes of the that have been overexploited in the world over the years ? 
 
-Q10 How much of the fish stocks are maintained at sustainable levels in the world of world as compared to overall production level? 
+Q10 How much of the fish stocks are maintained at sustainable levels in the world as compared to overall production level? 
 
 Q11 What is the production level of fish by each continent ?
 
@@ -153,13 +153,13 @@ Q12 What is the consumption level of fish by each continent ?
 
 Q13 What can we learn about the uses of fish catch by countries? 
 
-Q14 What can we learn about the uses of fish catch across the years? 
+Q14 What can we learn about the uses of fish catch over time? 
 
-Q15  Comparing seafood production to seafood consumption across the years 
+Q15  Comparing seafood production to seafood consumption over time?
 
 Q16 What can we learn about the sustainable levels of fishing as compared to farming 
 
-Q17 Would aquaculture alleviate the pressure of seafood consumption across the years? 
+Q17 Would aquaculture alleviate the pressure of seafood consumption over time? 
 
 Q18 What can we observe about the seafood consumption in coastal countries and landlocked countries over time? 
 
@@ -171,15 +171,15 @@ Q20 How much fresh water produce in each country over time ?
 
 **What has been the trend of seafood consumption of each country over the years ? ** 
 
-- We would expect that there is an increasing trend of seafood consumption levels over the years given that rise of population. 
+- The expectation is We would expect that there is an increasing trend of seafood consumption levels over the years given that the rise of population. 
 
-- We would expect that coastal countries consumed more seafood than landlocked countries. 
+- Coastal countries consumed more seafood than landlocked countries.
 
 **What has been the trend of captured vs farmed production of each country over the years ? **  
 
-- We would expect that the farmed production to be increasing over the years. 
+- We would expect that the aquaculture to be increasing over the years. 
 
-- We would expect the high technology countries to contribute more to the farmed production. 
+- The expectation is high technology countries to contribute more to the aquaculture. 
 
 **What is the contribution of each country in the global fishery sector ?**
 
@@ -199,7 +199,7 @@ Q20 How much fresh water produce in each country over time ?
 
 ## **What has been the trend of seafood consumption of each country over the years ?** 
 
-For a broad overview of the changes in seafood consumption, we'll start with the evolution of the average seafood consumption in the world over the years.
+We begin start with the evolution of the average seafood consumption in the world over the years.
 
 ### Annual seafood consumption in the World over the years 
 ```{r echo=FALSE}
@@ -220,18 +220,15 @@ p1 <-
 ggplotly(p1)
 ```
 
-Figure \@ref(fig:worldconsumption) shows the trend of world seafood consumption across the population, measured in kilograms per person per year.  
+Figure \@ref(fig:worldconsumption) shows the increasing trend in world seafood consumption from 1961 and peaked in 1989. However, the figure declined between 1990 and 1992, mainly due to economic difficulties  in the low-income countries,  such as Africa, Latin America, the Caribbean and the Near East East. This led to an increased pressure on the price of many products (Dumas, 1992). After the crisis has recovered, seafood consumption has increased throughout the world. Overall, this is consistent with our expectation of the increasing popularity of seafood consumption. 
 
-We observe an increasing trend in world seafood consumption from 1961 and it peaked in 1989. However, it is worth noting that the figure declined between 1990 and 1992.   The resulting drop was marked mainly due to the rise in global  prices and food security issues as mentioned in (The state of food and agriculture, 1989).  Public concerns about processing standards for seafood products and water pollution have gave rise to the safety concerns on consuming seafood products, leading to the reduction in the seafood consumption.  In addition to safety concerns, economic and financial difficulties remained an issue especially in the heavily indebted oil-exporting countries and low-income countries,  such as Africa, Latin America, the Carribean and the Near East East. This led to an increased pressure on the price of many products (Dumas, M. W. (1992)). After the crisis has recovered, seafood consumption has gradually increased throughout the world. The rise is because of the positive relation between health and seafood as consumers consider seafood as highly regarded for its abundance of high-quality nutrients, including proteins, polyunsaturated fatty acids and minerals, which are beneficial to health (Hosomi, R., Yoshida, M., & Fukunaga, K. (2012)). Overall, this is consistent with our expectation, a clear illustration of the increasing popularity of seafood consumption. 
-
-This simple plot suggest some directions for further exploration. Are these patterns the same for all countries? To investigate this, we'll follow the same procedure. We will partition the data based on the different nations.  
+We will now investigate the patterns for all countries by partitioning the data based on the different nations.
 
 ### Countries with the highest average consumption and the lowest average consumption  
 
-We've decided to look into the 10 countries with the highest average consumption and the 10 countries with the lowest average consumption, as the patterns of the other countries are pretty similar and the plots will be very congested with all countries included. As the original dataset provided contains other regions such as Central Africa Republic and Central America, we've performed an inner join with the dataset called iso3166 from the *maps* package to extract only countries relevant dataset. 
+Our analysis will be of the 10 countries with the highest average consumption and the 10 countries and the 10 countries with the lowest average consumption.  As the original dataset provided contains other regions, such as Central Africa Republic and Central America, we’ve performed an inner join with the dataset called iso3166 from the `maps` package to extract only countries relevant dataset. 
 
-
-The 10 countries with the highest average consumption from 1961 to 2017 are summarised in the table \@ref(tab:top10tbl) while table \@ref(tab:low10tbl) contains the list of 15 countries with the lowest average consumption.  These results are consistent with our expectations, where the 10 countries with the highest average consumption are all coastal countries.   Seafood is frequently the primary source of food and employment in coastal countries.
+Table \@ref(tab:top10tbl) shows the 10 countries with the highest average consumption from 1961 to 2017. Table \@ref(tab:low10tbl) contains the list of 10 countries with the lowest average consumption.  These results are consistent with our expectations, where the 10 countries with the highest average consumption are coastal countries.   Seafood is frequently the primary source of food and employment in coastal countries.
 
 
 ```{r echo=FALSE}
@@ -272,7 +269,7 @@ kable(head(lowest_consumption,10), caption = "10 countries with the lowest consu
 
 ### Geographic Differences : Trend in seafood consumption for top 10 nations 
 
-In this section we explore the changes in seafood consumption over time in the 10 countries with the highest average seafood consumption. Recall that in our earlier discussion of seafood consumption trend in the world where we observe a decrease in 1989. We then insert a vertical dashed line at the point where year is 1989 for comparison purposes.  
+In this section we explore the changes in seafood consumption over time in the 10 countries with the highest average seafood consumption. Recall that seafood consumption trend in the world where we observe a decrease in 1989, so we insert a vertical dashed line at year 1989 for comparison purposes.  
 
 ```{r countryconsumption1,  echo=FALSE, preserve = TRUE, fig.pos = 'H', out.extra = "", fig.cap = "Seafood consumption among the top 10 countries over time"}
 #trend in consumption for top 10 nations
@@ -312,36 +309,21 @@ top4 <- ggplot(data = top10_consumption,
 ggplotly(top4)
 ```
 
-There is considerable variation in seafood consumption trend among top 10 countries. As shown in figure \@ref(fig:countryconsumption2) and figure \@ref(fig:countryconsumption3), we observe an increasing trend from 1961 to 1989 for most of the countries except for Portugal where there's a sharp decrease in 1969. Interestingly, some of the countries like Hong Kong and Malaysia display an increasing trend in 1989 where the other countries are showing a decreasing trend in the seafood consumption, similar to what we have observed previously in the world trend in figure \@ref(fig:worldconsumption). This is mainly associated with the improvements of economic conditions in Asia in 1988 along with the recovery of production where food production as a whole remained stable and price inflation remained moderate (Food and Agricultural Organisation of the United Stations, 1989). Notably, seafood consumption in Maldives is the highest compared to the other nations and the trend fluctuates overtime. Fisheries sector has been a contributing sector for Maldives in employment, exports and food security. The trend is declining after 2010, due to a combination of factors, including overfishing, employment falling and higher fuel costs (Salinas, E., Van Doorn, R., & Redaelli, S. (2015)). Solomon islands and Japan also show a declining trend in seafood consumption too, which are mainly due to the overfishing problem.  Overall, these 10 countries display a different result to our expectations, even though some countries are showing an increasing trend in seafood consumption, there are others which show a decline in consumption. 
+Figure \@ref(fig:countryconsumption2) and figure \@ref(fig:countryconsumption3) highlights an increasing trend from 1961 to 1989 for most countries except Portugal. Interestingly,  Hong Kong and Malaysia display an increasing trend in 1989 whereas others show a decreasing trend , similar to figure \@ref(fig:worldconsumption). This is mainly associated with the improvements of economy in Asia in 1988 and price inflation remained moderate (Dumas, 1992). 
 
-```{r countryconsumption4,  echo=FALSE, preserve = TRUE, fig.pos = 'H', out.extra = "", fig.cap = "Seafood consumption among the lowest 10 countries over time"}
-low10_consumption <- consumption %>% filter(Entity %in% lowest_consumption$Entity) 
-low2 <- ggplot(data = low10_consumption,
-         aes(x = Year, y = consumption, colour = Entity)) +
-  geom_path()+
-  geom_line()+
-  geom_vline(xintercept= 1989, colour = "grey", linetype = "dashed")+
-   labs(y = "Average consumption (kg) per year") +
-  ggtitle("Seafood consumption per capita per person per year (kg)")+
-  scale_x_continuous(breaks = seq(min(annual_consumption$Year), max(annual_consumption$Year), by=10))
-plot.animation= low2+
-transition_reveal(Year)+
-view_follow(fixed_y=T)
-animate(plot.animation, height=365,width=608,fps=30,duration=10,end_pause = 120,res=100,rewind=F)
-anim_save("Seafood consumption per capita among the low 10 countries.gif")
-```
+Seafood consumption in Maldives is the highest and the trend fluctuates overtime. The trend is declining after 2010 due to overfishing, employment falling and higher fuel costs (Salinas, Van Doorn, & Redaelli, 2015). Solomon islands and Japan also show a declining trend, mainly due to the overfishing problem.  Overall, these 10 countries display different results to our expectations. Although some countries demonstrate an increasing trend in seafood consumption, others show a decline in consumption. 
 
 
 ## **What has been the trend of captured vs farmed production of each country over the years ? **
 
-Aquaculture also being known as fish and seafood farming acts as one of the primary source of protein as human population continues to expand to meet shortfalls in fish supplies.  Aquaculture also plays an important role in employment opportunities.  
+Aquaculture also being known as fish and seafood farming acts as one of the primary source of protein as human population continues to expands to meet shortfalls in fish supplies. Aquaculture also plays an important role in employment opportunities. 
 
 
 ### Change in aquaculture and capture fishery production in the world 
 
-First, we'll be exploring the trend of aquaculture in the world over the years as compared to wild fish captured.  We'll be using the dataset `captured_vs_farmed`. This dataset is already in tidy form. 
+We'll be exploring the trend of aquaculture in the world over years as compared to wild fish captured.  
 
-In figure  \@ref(fig:cf1), we can observe the change in capture fishery production and aquaculture from 1960 onwards. Global wild fish catch remained quite constant from year 2000 onwards, contributing to around 90 to 95 metric tons  per year. In contrast, aquaculture is growing rapidly since 1980s and it surpasses wild fish catch in 2013 to over 100 million metric tons per year. It is consistent with our initial expectation, where aquaculture  has developed increasingly over time. 
+Figure  \@ref(fig:cf1) illustrates that global wild fish catch remained relatively constant from year 2000 onwards whereas aquaculture has grown rapidly since 1980s surpassing wild fish catch in 2013. It is consistent with our expectation that aquaculture  has developed increasingly over time. 
 
 ```{r echo=FALSE }
 captured_vs_farmed  <- captured_vs_farmed %>% 
@@ -384,7 +366,8 @@ anim_save("Capture fisheries production VS Aquaculture production in the world.g
 In this section, we are going to explore the countries which contribute significantly to aquaculture over the years. As data might not be available pre-2000s for some of the countries, we decided to focus on data after year 2000. Similar to before, we'll be performing an inner join with the dataset called iso3166 from the *maps* package to extract only countries relevant dataset as the original dataset contains other regions as well. 
 
 
-Table \@ref(tab:table1) shows the world 10 largest aquaculture producers from year 2000 onwards, among which China is the runaway leader followed by Peru, Indonesia, United States, India and Japan. China accounts accounts for around 56% of aquaculture in the world in 2015 as shown in the table \@ref(tab:table2).  The comprehensive aquaculture extension (AE) system and the opening up in 1978 play a significant role in China in promoting the development of their aquaculture industry (Wang, P., Ji, J., & Zhang, Y. (2020)). This is consistent with our expectation where high technology countries to contribute more to the aquaculture. However, it's worth noting a significant share of production in 2015 also came from the other Asia regions such as Indonesia, India, Vietnam and Philippines, where aquaculture is largely based on small-scale, non-commercial and family-based operations (Subasinghe, R., Soto, D., & Jia, J. (2009)).    
+Table \@ref(tab:table1) shows the world 10 largest aquaculture producers from year 2000 onwards, among which China is the runaway leader followed by Peru, Indonesia and United States. China accounts for around 56% of aquaculture in the world in 2015 as shown in the table \@ref(tab:table2).  The comprehensive aquaculture extension system and the opening up in 1978 contribute to the development of aquaculture in China (Wang, Ji, & Zhang, 2020). This is consistent with our expectation where high technology countries develop more in aquaculture. However,  a significant share of production in 2015 also came from the other Asia regions such as Indonesia, where aquaculture is largely based on small-scale, non-commercial and family-based operations (Subasinghe, Soto, & Jia, 2009).    
+
 
 
 ```{r table1, echo=FALSE, preserve = TRUE, fig.pos = 'H', out.extra = "", fig.cap = "Average wild fish caught vs aquaculture from year 2000 onwards"}
@@ -451,7 +434,7 @@ ggplotly(trend_country_cf2)
 ```
 
 
-Aquaculture production within each region is diverse. In figure \@ref(fig:cf3), most countries display an increasing trend in aquaculture production, especially in the Asia region, including China, India, Indonesia, Philippines and Vietnam. This pattern is consistent with our initial expectation, not to mention that aquaculture production has also surpassed the wild fish captured in these countries in the recent years.  In contrast, some countries are still relying more on the fisheries compared to aquaculture at the recent stage, including Japan, United States, Peru and Chile.  
+In figure \@ref(fig:cf3), most countries display an increasing trend in aquaculture production, especially in the Asia region, including China, India and Indonesia. This pattern is consistent with our initial expectation. Some countries are still relying more on the fisheries compared to aquaculture at the recent stage, including Japan and United States.  
 
 
 ## **What is the contribution of each country in the global fishery sector ?**
@@ -508,7 +491,7 @@ production_bar
 
 From the Figure \@ref(fig:production)) we can see the top producers in the world. If we exclude the continental observations and group of countries according to their economic development we can see that China,Japan,Peru and United States have been the top producers of the world. These countries have very large coastal regions, and are able to exploit them to their advantage. Another benefit of having a large coastal region is that these countries have high consumption of fish and most of their cuisine is based around fish. 
 
-Similarly we can see that, the countries that are at the bottom of the fish production table are the arid regions of the world. These countries include Lesotho, Kyrgyzstan, Tajikistan and Jordan. They have very few sources of water and mostly consume meat to supplement their diet.
+Similarly, the countries that are at the bottom of the fish production table are the arid regions of the world. These countries include Lesotho, Kyrgyzstan, Tajikistan and Jordan. They have very few sources of water and mostly consume meat to supplement their diet.
 
 These findings are within expectations of initial analysis. Countries having a very large coastal line are more dependent on fish for their diet and can even sell them in the international market while the land locked and dry regions have a very minuscule share of fish production in the world.
 
@@ -582,7 +565,7 @@ production_plot <- production_plot %>%
 production_plot
 ```
 
-From the Figure \@ref(fig:type)), we can observe the trend of fish production in the world according to the types of fishes that are being consumed around the world. **"Freshwater fishes"** and **"pelagic fishes"** make up the majority of fish production in the world while **"marine fish"** and **"cephalopods"** are at the bottom of fish production trend.
+From figure \@ref(fig:type)), we can observe the trend of fish production in the world according to the types of fishes that are being consumed around the world. **"Freshwater fishes"** and **"pelagic fishes"** make up the majority of fish production in the world while **"marine fish"** and **"cephalopods"** are at the bottom of fish production trend.
 
 It is clear that the fish production has always shown a upward trend and the majority of fish that is being consumed around the world is from freshwater sources or from pelagic zones of the oceans. 
 
@@ -639,21 +622,70 @@ Since these two variables complement each other , we can observe that when one i
 
 # References
 
-Hannah Ritchie and Max Roser (2021) - "Biodiversity". Published online at OurWorldInData.org. Retrieved from: 'https://ourworldindata.org/biodiversity' [Online Resource]
+Becker OScbRA, Minka ARWRvbRBEbTP, Deckmyn. A (2021). _maps: Draw Geographical Maps_. R
+  package version 3.4.0, <https://CRAN.R-project.org/package=maps>.
 
-Hughes E (2022). _tidytuesdayR: Access the Weekly 'TidyTuesday' Project Dataset_. R package version
-  1.0.2, <https://CRAN.R-project.org/package=tidytuesdayR>.
+C. Sievert. Interactive Web-Based Data Visualization with R, plotly, and shiny. Chapman and
+  Hall/CRC Florida, 2020.
 
 Dumas, M. W. (1992). Productivity trends: prepared fish and seafoods industry. Monthly Lab. Rev., 115, 3.
 
-Hosomi, R., Yoshida, M., & Fukunaga, K. (2012). Seafood consumption and components for health. Global journal of health science, 4(3), 72.
+Hughes E (2022). _tidytuesdayR: Access the Weekly 'TidyTuesday' Project Dataset_. R package version
+  1.0.2, <https://CRAN.R-project.org/package=tidytuesdayR>.
+  
+H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016.
 
-Jensen, Helen H. "Changes in seafood consumer preference patterns and associated changes in risk exposure." Marine Pollution Bulletin 53.10-12 (2006): 591-598.
 
-Bennett, A., Patil, P., Kleisner, K., Rader, D., Virdin, J., & Basurto, X. (2018). Contribufion of fisheries to food and nutrifion security: Current knowledge, policy, and research.
+Ooms J (2022). _gifski: Highest Quality GIF Encoder_. R package version 1.6.6-1,
+  <https://CRAN.R-project.org/package=gifski>.
+  
+Pedersen T, Robinson D (2020). _gganimate: A Grammar of Animated Graphics_. R package
+  version 1.0.7, <https://CRAN.R-project.org/package=gganimate>.
 
+Pedersen T (2020). _patchwork: The Composer of Plots_. R package version 1.1.1,
+  <https://CRAN.R-project.org/package=patchwork>.
+
+Pedersen T (2020). _transformr: Polygon and Path Transformations_. R package version 0.1.3,
+  <https://CRAN.R-project.org/package=transformr>.
+  
 Salinas, E., Van Doorn, R., & Redaelli, S. (2015). Maldives: Identifying Opportunities and Constraints to Ending Poverty and Promoting Shared Prosperity.
+
+Simon Garnier, Noam Ross, Robert Rudis, Antônio P. Camargo, Marco Sciaini, and Cédric
+  Scherer (2021). Rvision - Colorblind-Friendly Color Maps for R. R package version 0.6.2.
+  
+  
+Simon Garnier, Noam Ross, Robert Rudis, Antônio P. Camargo, Marco Sciaini, and Cédric Scherer (2021).   Rvision - Colorblind-Friendly Color Maps for R.
+
+Subasinghe, R., Soto, D., & Jia, J. (2009). Global aquaculture and its role in sustainable   development. Reviews in aquaculture, 1(1), 2-9.
+
+Tierney N (2017). “visdat: Visualising Whole Data Frames.” _JOSS_, *2*(16), 355.
+  doi:10.21105/joss.00355 <https://doi.org/10.21105/joss.00355>,
+  <http://dx.doi.org/10.21105/joss.00355>.
+
+Urbanek S (2013). _png: Read and write PNG images_. R package version 0.1-7,
+  <https://CRAN.R-project.org/package=png>.
 
 Wang, P., Ji, J., & Zhang, Y. (2020). Aquaculture extension system in China: development, challenges, and prospects. Aquaculture reports, 17, 100339.
 
-Subasinghe, R., Soto, D., & Jia, J. (2009). Global aquaculture and its role in sustainable development. Reviews in aquaculture, 1(1), 2-9.
+Wickham H, Averick M, Bryan J, Chang W, McGowan LD, François R, Grolemund G, Hayes A, Henry
+  L, Hester J, Kuhn M, Pedersen TL, Miller E, Bache SM, Müller K, Ooms J, Robinson D, Seidel
+  DP, Spinu V, Takahashi K, Vaughan D, Wilke C, Woo K, Yutani H (2019). “Welcome to the
+  tidyverse.” _Journal of Open Source Software_, *4*(43), 1686. doi:10.21105/joss.01686
+  <https://doi.org/10.21105/joss.01686>.
+
+Wickham H, Hester J, Bryan J (2022). _readr: Read Rectangular Text Data_. R package version
+  2.1.2, <https://CRAN.R-project.org/package=readr>.
+
+Wilke C (2021). _ggridges: Ridgeline Plots in 'ggplot2'_. R package version 0.5.3,
+  <https://CRAN.R-project.org/package=ggridges>.
+  
+Yihui Xie (2022). bookdown: Authoring Books and Technical Documents with R Markdown. R
+  package version 0.26.
+
+Zhu H (2021). _kableExtra: Construct Complex Table with 'kable' and Pipe Syntax_. R package
+  version 1.3.4, <https://CRAN.R-project.org/package=kableExtra>.
+
+
+```{r, echo = FALSE}
+sessioninfo::session_info()
+```
