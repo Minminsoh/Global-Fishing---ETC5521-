@@ -7,6 +7,7 @@ Team members:
 * [Rohan Baghel]
 * [Min Min Soh]
 * [Zhang Zhang]
+* [Xiyun Zhou]
 
 # Steps
 
