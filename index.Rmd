@@ -31,23 +31,6 @@ knitr::opts_chunk$set(echo = FALSE,
                       fig.align = "center")
 ```
 
-# Introduction and motivation
-
-Global fishing receives a great deal of attention in the media for the past decades. The rise of world population has increased the demand for seafood across the world. Meanwhile, the health of fish population in the world remains as a concern with the rise of global fishing. Fish farming (or ‘aquaculture’)helps to contribute to the seafood production while alleviating the pressure of wild fisheries. 
-
-This study is based on the data sets of global fishing. We explore these data by analyzing the performance for each country/region in terms of consumption, production and fish stock level. Moreover, we compare different data sets to reveal unexpected findings.
-
-We begin by describing the data in the next section, including the way we source it and prepare it for analysis. 
-
-In the analysis section, we present our observations through graphical displays. Our main tool is R, a programming language for statistical computing and graphics.
-
-
-
-
-
-
-# Data description
-
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(ggplot2)
@@ -66,6 +49,7 @@ library(gifski)
 library(viridis)
 library(png)
 library(GGally)
+library(naniar)
 
 ```
 
@@ -82,7 +66,169 @@ production <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience
 fishery <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-12/global-fishery-catch-by-sector.csv')
 ```
 
+# Introduction and motivation
+
+Global fishing receives a great deal of attention in the media for the
+past decades. The rise of world population has increased the demand for
+seafood across the world. Meanwhile, the health of fish population in
+the world remains as a concern with the rise of global fishing. Fish
+farming (or 'aquaculture')helps to contribute to the seafood production
+while alleviating the pressure of wild fisheries.
+
+This study is based on the data sets of global fishing. We explore these
+data by analyzing the performance for each country/region in terms of
+consumption, production and fish stock level. Moreover, we compare
+different data sets to reveal unexpected findings.
+
+We begin by describing the data in the next section, including the way
+we source it and prepare it for analysis.
+
+In the analysis section, we present our observations through graphical
+displays. Our main tool is R, a programming language for statistical
+computing and graphics.
+
+# Data description
+
+The data set has been obtained from `tidytuesday` r package or through
+the website <https://ourworldindata.org>. The data comprises of four
+files in the ".csv" format which is machine readable and can be used to
+analyze the state of fish production and consumption in the world. The
+data dictionary for the data set has been given below. They define the
+variables and their types in each of the data sets.
+
+## `capture-fisheries-vs-aquaculture.csv`
+
+### 'captured_vs_farmed' - Data Dictionary
+
+Entity: Country/entity Code: Country code Year: Year Aquaculture
+production (metric tons): Production of aquaculture Capture fisheries
+production (metric tons): Captured aquaculture
+
+```{r}
+#str(captured_vs_farmed )
+```
+
+The data has 5 variables and 14,674 observations. The 'Code' variable is
+character while others are numeric .
+
+### 'captured_vs_farmed' - Data quality Check
+
+```{r}
+captured_vs_farmed %>%
+  vis_miss(sort_miss = TRUE)
+```
+
+The data has 8.1% missing value. Most of them are in the variables of
+'aquaculture' and 'code'.
+
+## `fish-and-seafood-consumption-per-capita.csv`
+
+### 'consumption' - Data Dictionary
+
+Entity: Country/entity Code: Country code Year: Year Fish,Seafood-Food
+supply quantity(kg/capita/yr)(FAO, 2020):Food supply in fish
+
+```{r}
+#str(consumption )
+```
+
+As we can see, there are 4 variables and 11,028 observation in total.
+The 'Entityy' and 'Code' variable are character while others are
+numerical.
+
+### 'consumption' - Data quality Check
+
+```{r}
+consumption %>%
+  vis_miss(sort_miss = TRUE)
+```
+
+15.72% of values in 'Code' are missing. This does not affect our
+analysis.
+
+## `fish-stocks-within-sustainable-levels.csv`
+
+### 'stock' - Data Dictionary
+
+Entity: Country/entity Code: code Year: Year Share of fish stocks within
+biologically sustainable levels: Share of sustainable fish stock Share
+of fish stocks that are overexploited: Share of fish stock that are
+overexploited
+
+```{r}
+#str(stock)
+```
+
+'stock' has 5 variables and 51 observations. The 'Entityy' and 'Code'
+variable are character while others are numerical.
+
+### 'stock' - Data quality Check
+
+```{r}
+stock %>%
+  vis_miss(sort_miss = TRUE)
+```
+
+Similar to 'consumption', all missing value are from 'Code'.
+
+## `seafood-and-fish-production-thousand-tonnes.csv`
+
+### 'production' - Data Dictionary
+
+Entity: Country/entity Code: Country code Year: Year\
+Pelagic Fish - 2763 - Production - 5510 - tonnes: Pelagic Fish
+Crustaceans - 2765 - Production - 5510 - tonnes: Crustaceans
+Cephalopods - 2766 - Production - 5510 - tonnes: Cephalopods Demersal
+Fish - 2762 - Production - 5510 - tonnes: Demersal Freshwater Fish -
+2761 - Production - 5510 - tonnes: Freshwater Molluscs, Other - 2767 -
+Production - 5510 - tonnes: Molluscs Marine Fish, Other - 2764 -
+Production - 5510 - tonnes: Marine
+
+```{r}
+#str(production)
+```
+
+There are 10 variables and 10,326 observations. The 'Entityy' and 'Code'
+variable are character while others are numerical.
+
+### 'production' - Data quality Check
+
+```{r}
+production %>%
+  miss_var_summary(sort_miss = TRUE)
+```
+
+As we can see, only ' Entity' and 'Code' do not have missing values.
+
 # Expected findings
+
+1.  **What would be the notable finding when we comparing the
+    consumption with production?**
+
+-   we expect there is a positive relationship between seafood
+    consumption and production
+
+2.  **Compare production of 7 different fish type. Which type of seafood
+    contribute the most to meet the increasing demand?**
+
+-   Initial guess: Asia has the highest production of the seafood
+
+3.  **What have been the performances of the top 10 seafood producers?**
+
+-   One of the interesting finding of previous analysis is that seafood
+    consumption is highly affected by the geographical factor. Namely,
+    coastal. countries tend to consume more than arid regions. Based on
+    this, we expect to see the world seafood production is related to
+    geographical factor as well. This may implies that the production
+    may be concentrated in certain region.
+
+4.  **What has been the trend of fish stocks in the world?**
+
+-   Previous analysis reveals a major decline in world seafood
+    consumption in 1989. Here we expect to see that the trend of fish
+    stock may show a corresponding movement.
+
+# Analysis and findings
 
 ## What would be the notable finding when we comparing the consumption with production?
 
@@ -238,8 +384,7 @@ average consumption and total production as we expected.The correlation
 coefficient is 0.97 almost reach to 1. Moreover, the two methods used to
 produce fish also has a positive linear relation.
 
-
-### Summary and findings
+### Summary and interesting findings
 
 1.  Upward trend for seafood production and consumption worldwide\
 2.  Positive linear relationship between seafood production and
@@ -248,8 +393,6 @@ produce fish also has a positive linear relation.
     linear relation.
 4.  Asia is the major continent to produce seafood and China produces
     the most seafood.
-
-
 
 ## Compare production of 7 different fish type. Which type of seafood contribute the most to meet the increasing demand?
 
@@ -344,11 +487,19 @@ ggplot(col_type_fish, aes(`Fish Type`,`production(tons)`)) +
 
 ### Visualization and analysis
 
-From the column plot \@ref:(fishtype) we can see that the Pelagic Fish
-has the largest production scale when comparing with other type fish. Demersal Fish used to take the second largest contribution of fish product. However, the second largest changed to Freshwater Fish in recent years. The overall trend for each type fish is increasing along with time. While the production of Pelagic Fish decreased in this decade and Demersal Fish almost keep a same level. 
+From the column plot \@ref(fig:fishtype) we can see that the Pelagic Fish
+has the largest production scale when comparing with other type fish.
+Demersal Fish used to take the second largest contribution of fish
+product. However, the second largest changed to Freshwater Fish in
+recent years. The overall trend for each type fish is increasing along
+with time. While the production of Pelagic Fish decreased in this decade
+and Demersal Fish almost keep a same level.
 
 The table below shows the maximum yearly production of 7 different fish
-type by countries. Americas has the largest production for Pelagic Fish. Asia contribute most for Crustaceans, Cephalopods, Freshwater Fish, Molluscs and Marine Fish. And European countries contribute most of the Demersal Fish. 
+type by countries. Americas has the largest production for Pelagic Fish.
+Asia contribute most for Crustaceans, Cephalopods, Freshwater Fish,
+Molluscs and Marine Fish. And European countries contribute most of the
+Demersal Fish.
 
 #### `Maximum yearly production of 7 different fish type`
 
@@ -362,32 +513,508 @@ type by countries. Americas has the largest production for Pelagic Fish. Asia co
 | Molluscs        | Asia     | 6115966                 |
 | Marine Fish     | Asia     | 6597212                 |
 
+### Summary and interesting findings
+
+1.  Pelagic fish takes the largest fish production.
+2.  Asia contribute the most for fish production.
+
+## What have been the performances of the top 10 seafood producers?
+
+### Method:
+
+We are going to specify the analysis area by focusing on the top 10
+seafood producers and digging the data from a wider prospective.
+
+Here we use 'captured_vs_farmed' data set. The first reason is that
+'captured_vs_farmed' contains less NA value than 'production'. Secondly,
+we tend to focus on the trend of 'captured vs farmed' seafood production
+for those top producers.
+
+In addition, the use of sorted data from the original report help us
+quite a lot to simplify the process. These data includes: 'country_cf',
+'dat', 'world_cap_farm' and 'captured_vs_farmed_long'.
+
+To answer this question, we took the following steps:
+
+1 We worked out the overall top ten producers between 2015-2018 as well
+as the top 10 in terms of captured or farmed fish during the same
+period. We took the average production for each country 2015 - 2018
+because there are many missing value in 2018. This allows us to present
+a accurate picture to reflect the most recent seafood productivity of
+each country.
+
+2 Next we figured out the top ten producers of 1960s using data between
+1960-1970 due to the problem of missing value.Then we compared the top
+10 of 1960s with the list of 2010s.
+
+3 We would take a look at the percentage contribution for each of the
+top producers.
+
+4 Lastly, we tried to find out what were the changes of production
+between 1960s and 2010s.
+
+### Visualization and analysis
+
+```{r}
+captured_vs_farmed  <- captured_vs_farmed %>% 
+         rename(aquaculture = `Aquaculture production (metric tons)`,
+         captured = `Capture fisheries production (metric tons)`)
+captured_vs_farmed<- captured_vs_farmed %>% 
+         mutate(Entity = toupper(Entity))
+dat <- iso3166 
+dat <- dat %>% mutate(ISOname = toupper(ISOname)) 
+dat <-  dat %>%rename(Entity = ISOname)
+consumption <-  consumption %>% mutate(Entity = toupper(Entity))
+country_cf <- inner_join(captured_vs_farmed, dat, by = "Entity")
+captured_vs_farmed_long  <- captured_vs_farmed %>% 
+        pivot_longer(cols = aquaculture:captured,names_to = "production_type",values_to = "production")
+avg_contribution1 <- country_cf %>% 
+        filter (Year >= 2015) %>%
+        group_by(Entity)%>%
+        summarise(avg_captured = mean(captured, na.RM = TRUE),
+            avg_aquaculture = mean(aquaculture, na.RM = TRUE))%>%
+        arrange(-avg_aquaculture) %>%
+        mutate(total= avg_captured+avg_aquaculture)%>%
+        arrange(-total) %>%
+        mutate(rank = row_number())%>%
+        filter(rank %in% 1:10) %>%
+        mutate(across(avg_captured:avg_aquaculture, ~ scales::label_comma()(.x))) %>%
+        rename(`Average_captured` = avg_captured,
+               `Average_aquaculture` =    avg_aquaculture)
+avg_aquaculture1 <- country_cf %>% 
+        filter (Year >= 2015) %>%
+        group_by(Entity)%>%
+        summarise(avg_aquaculture = mean(aquaculture, na.RM = TRUE))%>%
+        arrange(-avg_aquaculture) %>%
+        mutate(rank = row_number())%>%
+        filter(rank %in% 1:10) %>%
+        rename(`avg_aquaculture` = avg_aquaculture)
+avg_captured1 <- country_cf %>% 
+        filter (Year >= 2015) %>%
+        group_by(Entity)%>%
+        summarise(avg_captured = mean(captured, na.RM = TRUE))%>%
+        arrange(-avg_captured) %>%
+        mutate(rank = row_number())%>%
+        filter(rank %in% 1:10) %>%
+        rename(`avg_captured` = avg_captured)
+```
 
 
 
-
-### Summary and findings
-
-1. Pelagic fish takes the largest fish production. 
-2. Asia contribute the most for fish production. 
+```{r}
 
 
+Graph.5a <- ggplot(avg_contribution1, aes(x= reorder(Entity, -total), y=total/1000000, fill=Entity)) + 
+        geom_col( )+
+        scale_fill_brewer(palette = "Set3") +
+        theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+        labs(x = "Entity", y = "production ( millions metric tons)")+
+        ggtitle("Graph.5a: Tope 10 producers 2010s")
+Graph.5b <- ggplot(avg_aquaculture1, aes(x= reorder(Entity, desc(avg_aquaculture)),  y=avg_aquaculture/1000000,fill=Entity)) + 
+        geom_col( )+
+        scale_fill_brewer(palette = "Set3") +
+        theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+        labs(x = "Entity", y = " production (millions metric tons)")+
+        ggtitle("Graph.5b: Tope 10 aquaculture producers 2010s ")
+Graph.5c <- ggplot(avg_captured1, aes(x= reorder(Entity, desc(avg_captured)), y=avg_captured/1000000,fill=Entity)) + 
+        geom_col( )+
+        scale_fill_brewer(palette = "Set3") +
+        theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+        labs(x = "Entity", y = " production (millions metric tons)")+
+        ggtitle("Graph.5c: Top 10 captured producers 2010s ")
+Graph.5a 
+Graph.5b  
+Graph.5c
+```
 
+From the 3 plots above, we can see that China
+and Indonesia are the top 2 producers in each of the three ranks. China
+takes the dominate position of seafood production.
 
+In addition, the U.s and Peru are the overall top producer but did not
+shown on the rank of aquaculture fishing. Similarly, Philippines and
+Bangladesh are not listed in the top captured seafood producer. To sum
+up, only six countries present a strong productivity in both captured
+and farmed production.
 
-# Conclusion 
+```{r}
+contribution70 <- country_cf %>% 
+  filter (Year<=1970) %>%
+  group_by(Entity)%>%
+  mutate_all(~replace(., is.na(.), 0))%>%
+  summarise(avg_captured = mean(captured, na.RM = TRUE),
+            avg_aquaculture = mean(aquaculture, na.RM = TRUE))%>%
+  mutate(total= avg_captured+avg_aquaculture)%>%
+  arrange(-total) %>%
+  mutate(rank = row_number())%>%
+  filter(rank %in% 1:10) %>%
+  mutate(across(avg_captured:avg_aquaculture, ~ scales::label_comma()(.x))) 
+aquaculture70 <- country_cf %>% 
+  filter (Year <= 1970) %>%
+  group_by(Entity)%>%
+  summarise(avg_aquaculture = mean(aquaculture, na.RM = TRUE))%>%
+  arrange(-avg_aquaculture) %>%
+  mutate(rank = row_number())%>%
+  filter(rank %in% 1:10) %>%
+  rename(`avg_aquaculture` = avg_aquaculture)
+captured70 <- country_cf %>% 
+  filter (Year <= 1970) %>%
+  group_by(Entity)%>%
+  summarise(avg_captured = mean(captured, na.RM = TRUE))%>%
+  arrange(-avg_captured) %>%
+  mutate(rank = row_number())%>%
+  filter(rank %in% 1:10) %>%
+  rename(`avg_captured` = avg_captured)
+Graph.5d <- ggplot(contribution70, aes(x= reorder(Entity, -total), y=total/1000000,fill=Entity)) + 
+  geom_col( )+
+  scale_fill_brewer(palette = "Set3") +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+  labs(x = "Entity", y = "production (millions metric tons)")+
+  ggtitle("Graph.5d: Tope 10 producers 1960s")
+Graph.5e <- ggplot(aquaculture70, aes(x= reorder(Entity, desc(avg_aquaculture)),y=avg_aquaculture/1000000,fill=Entity )) + 
+  geom_col( )+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+  labs(x = "Entity", y = "production (millions metric tons)")+
+  ggtitle("Graph.5e: Tope 10 aquaculture producer 1960s")
+Graph.5f <- ggplot(captured70, aes(x= reorder(Entity, desc(avg_captured)), y=avg_captured/1000000, fill=Entity)) + 
+  geom_col( )+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+  labs(x = "Entity", y = " ")+
+  ggtitle("Graph.5f: Top 10 captured producer 1960s")
+```
 
-The seafood consumption and production keep increase with the time change. Moreover, it is noteable that a strongly positive linear relationship between fish consumption and production. China produces the most seafood in worldwide and Asia is the main continent producing seafood. Pelagic fish has the highest production scale and most of them comes from Americas. 
+```{r}
+Graph.5d +Graph.5a 
+```
 
-Compared with 1960s, developing countries from South-east Asia take more seats in top 10 seafood
-producers in 2010s. Also, farmed fishing is the most important factor to the improvement overall
-productivity. Moreover, we observe that overexploited stock has strong positive correlation with world
-fish consumption.
+Compared the top 10 producer in 1960s with that of 2010s, we can see
+Graph.5d +Graph.5a that three developed countries:South Africa, Canada and
+Spain were the top 10 in 1960s but did not shown on the list of 2010s.On
+the other hand, three developing countries: Vietnam, Philippines and
+Bangladesh are the new countries listed in 2010s rank. Geographically,
+all the new comers in 2010s are located in South-east Asia.
 
+Moreover, considering what we observed in Graph.5a-5c, it seems like the
+high aquaculture production is the main reason for Vietnam, Philippines
+and Bangladesh to be ranked as top 10 producer in 2010s.
 
+```{r change, echo=FALSE, warning = FALSE, message = FALSE, preserve = TRUE, fig.pos = 'H', out.extra = "", fig.cap =""}
+ 
 
+avg_contribution1970 <- country_cf %>% 
+       filter (Year<=1970) %>%
+       group_by(Entity)%>%
+       summarise(avg_captured = mean(captured, na.RM = TRUE),
+       avg_aquaculture = mean(aquaculture, na.RM = TRUE))%>%
+       mutate_all(~replace(., is.na(.), 0))%>%
+       mutate(total1970= avg_captured+avg_aquaculture)%>%
+       filter(Entity %in% c("CHINA","INDONESIA", "INDIA", "VIETNAM", "UNITED STATES", "PERU","JAPAN", "PHILIPPINES", "BANGLADESH", "NORWAY"))%>%
+       mutate(across(avg_captured:avg_aquaculture, ~ scales::label_comma()(.x))) 
+Top10_percentage_change <- avg_contribution1970 %>%
+       dplyr::select(Entity, total1970)%>%
+       full_join(avg_contribution1, by=NULL)%>%
+       rename("total2015"=total)%>%
+       dplyr::select(Entity, total1970,total2015)%>%
+       mutate(percentage_change = (total2015-total1970)/total1970*100)%>%
+       arrange(desc(percentage_change))
+Graph.5h <- ggplot(Top10_percentage_change, aes(x=reorder(Entity, percentage_change), y=percentage_change))+
+geom_col(col = ifelse(Top10_percentage_change$percentage_change < 0,'red','green') )+
+      theme(axis.text.x = element_text(angle = 60, hjust = 1))+
+      labs(x = "Entity", y = "Percentage change 1960s-2010s")+
+      ggtitle("Graph.5h: Percentage change of top 10 producers 1960s-2010s")+
+      coord_flip()
 
+ ggplotly(Graph.5h)
+```
 
+It can be seen from Graph.5h that both China and Indonesia
+showed a more than 20 times increase in seafood production from
+1960-2018. Following this are the tier 2 countries: Vietnam, India,
+Bangladesh and Philippines, a huge increase between 5 to 10 times. The
+U.s and Norway showed a 110% and 59% rise respectively.
+
+On the other hand, Peru and Japan experienced a considerable decline in
+seafood production, which were 37% and 41%. However, they are still the
+top 10 producer all over the world.
+
+```{r cap, echo=FALSE, warning = FALSE, message = FALSE, preserve = TRUE, fig.pos = 'H', out.extra = ""}
+cf_data_long1 <- captured_vs_farmed_long  %>% 
+       filter (Year >= 1960) %>%
+       mutate(Entity = toupper(Entity)) %>%
+       filter (Entity %in% c(avg_contribution1$Entity))
+Graph.5i <- cf_data_long1%>%
+       ggplot(aes(x = Year,y = (production/1000000),colour = production_type))+
+       geom_line()+
+       labs(x = "Year", y = "Production (metric tons in millions)")+
+       scale_y_continuous(labels = scales::label_comma(scale = 1e-0))+
+       scale_x_continuous(breaks = seq(1960, 2017, by= 10))+ 
+       facet_wrap(~ Entity, scales =  "free", nrow = 3)+
+       theme(axis.text.x = element_text(angle = 60, hjust = 1))+
+       scale_color_viridis(discrete = TRUE)+
+       ggtitle("Graph.5i: Captured vs aquaculture  1960-2018")
+ggplotly(Graph.5i)
+```
+
+Here we tend to further explore what happened to Japan and Peru. As we
+can see from Graph.5i, the farmed production of these two countries
+remains at the same level from 1960-2018, while the captured production
+declined quite a lot compare to the peak.
+
+Moreover, compared Graph.5i and Graph.5h, it is clearly
+that the countries with relatively lower increase (The U.s, Norway) or
+decline (Peru, Japan) in the total production, all presenting a poor
+development in farmed production. In other words, those four countries
+produce more captured fish than farmed seafood.
+
+In comparison, other six countries with relatively higher overall
+increase, experiencing a significant upward trend in farmed production.
+The level of aquaculture fishing of these six countries are higher than
+captured fish.
+
+### Summary and interesting findings:
+
+1 Developing countries take more position in top ten seafood producers
+compared with 1960s..
+
+2 ALL the new comers on the top 10 list in 2010s are from South-east
+Asia.
+
+3 The center of world's seafood production is now in West pacific and
+Southeast Pacific.
+
+4 Farmed production contribute more than captured seafood to the
+improvement of countries' overall productivity.
+
+5 China and Indonesia are the top 2 seafood producers in total
+production as well as the farmed and captured ranking. Over the last 60
+years, these two countries experienced the most significant upward trend
+in seafood production.
+
+6 Peru and Japan were the top 2 countries in 1960s. However, they were
+the only two countries which showed a decrease in seafood production
+within the top 10 list over the last 60 years.
+
+## What has been the trend of fish stocks in the world?
+
+### Method:
+
+Here we use score 'stock' and 'consumption' data. We not only analysed
+data within 'stock', but also compare 'stock' with 'consumption'.
+
+Similarly, we used some cleaned data from original report including
+'consumption' and 'annual_consumption'.
+
+1 We firstly plotted a graph to have a comparison of sustainable vs
+overexploited based on trend and proportion.
+
+2 Previous analysis reveals the world's trend based on the stock type.
+Here we would like to go further by analyzing the trend based on each
+region.
+
+3 Also, we are going to compare the world's trend of overexploited stock
+with the trend of world seafood consumption. A considerable decline in
+seafood consumption around 1989 was observed in previous analysis. By
+comparing these two data sets, we would like to see if any similar
+pattern exist.
+
+### Visualization and analysis
+
+```{r}
+stock_world <- stock %>% 
+      mutate(Sustainable_levels_Fish = 
+      stock$`Share of fish stocks within biologically sustainable levels (FAO, 2020)`,
+      Overexploited_Fish = stock$`Share of fish stocks that are overexploited`) %>%
+      dplyr::select(-`Share of fish stocks within biologically sustainable levels (FAO, 2020)`, -`Share of fish stocks that are overexploited`) %>%
+      slice(31:51) %>% 
+      dplyr::select(-Code)
+stock_worldL <- stock_world %>% 
+      pivot_longer(cols = Sustainable_levels_Fish	:Overexploited_Fish,names_to = "type", values_to = "proportion") 
+Graph.6a <- ggplot(stock_worldL) +
+geom_col(aes(x = Year, y = proportion, fill = type, position = "fill",width = 0.8)) +
+      theme(axis.text.x = element_text(angle = 60, hjust = 1))+
+      labs(x = "Year", y = "Percentage to the world ")+
+      scale_x_continuous(breaks = seq(1974, 2017, by= 2))+
+      ggtitle("Graph.5h: Percentage change of stock level")
+      
+ggplotly(Graph.6a)
+```
+
+It is obviously that sustainable stock is always having a large
+proportion then those overexploited.
+
+Although the level of overexploited stock increasing with fluctuation
+overtime, it has never exceeded 40% of the total.
+
+```{r}
+stock_worldL1 <- stock_worldL %>% filter(type=='Overexploited_Fish')
+Graph.6b<- ggplot( stock_worldL1, aes(x=Year, y=proportion))+
+      geom_line(colour = "red")+
+      scale_x_continuous(breaks = seq(1974, 2017, by= 4))+
+      labs(x = "Year", y = "Proportion of Overexploited Fish")+
+      ggtitle("Graph.6b: Trend of Overexploited Fish % ")+
+      geom_vline(xintercept = 1989,  color = "blue", size=0.5)+
+      geom_vline(xintercept = 1990,  color = "green", size=0.5)+
+      geom_vline(xintercept = 1995,  color = "red", size=0.5)+
+      geom_vline(xintercept = 1997,  color = "pink", size=0.5)+
+      geom_vline(xintercept = 2000,  color = "yellow", size=0.5)+
+      geom_vline(xintercept = 2004,  color = "purple", size=0.5)+
+      geom_vline(xintercept = 2008,  color = "black", size=0.5)+
+      geom_vline(xintercept = 2011,  color = "orange", size=0.5)
+consumption <- consumption %>% 
+      rename(consumption = `Fish, Seafood- Food supply quantity (kg/capita/yr) (FAO, 2020)`)
+annual_consumption <- consumption %>% 
+      group_by(Year) %>%
+      summarise(av_consumption = mean(consumption, na.rm=TRUE))
+annual_consumption1<- annual_consumption %>% 
+      filter(Year>'1973')
+Graph.6c <-ggplot(data = annual_consumption1,
+         aes(x = Year, y = av_consumption)) +
+      geom_line(colour = "blue") +
+      labs(y = "Average consumption") +
+      scale_x_continuous(breaks = seq(1974, 2017, by= 3))+
+      ggtitle("Graph.6c: Trend of Seafood consumption ")+
+      geom_vline(xintercept = 1989,  color = "blue", size=0.5)+
+      geom_vline(xintercept = 1992,  color = "green", size=0.5)+
+      geom_vline(xintercept = 1997,  color = "red", size=0.5)+
+      geom_vline(xintercept = 1998,  color = "pink", size=0.5)+
+      geom_vline(xintercept = 2001,  color = "yellow", size=0.5)+
+      geom_vline(xintercept = 2006,  color = "purple", size=0.5)+
+      geom_vline(xintercept = 2011,  color = "black", size=0.5)+
+      geom_vline(xintercept = 2013,  color = "orange", size=0.5)
+Graph.6b /Graph.6c
+```
+
+```{r}
+consumption_stock <- left_join(stock_world, annual_consumption1, by='Year')%>%
+        rename('Consumption_(kg/capita/yr)'= av_consumption)
+Graph.6d<- ggpairs(consumption_stock, columns = 3:5)
+Graph.6d
+```
+
+Here we compared the proportion of overexploited stock with the world
+seafood consumption.
+
+We plotted 8 vertical lines.Each of them represents a start / end point
+of a particular up / downward trend. Also, vertical lines with the same
+color corresponds to each other in different graphs. Since a major
+decline in consumption in 1989 was observed in previous analysis, we set
+up 1989 as the first spot.
+
+It can be seen from  Graph.6b /Graph.6c that the trend of overexploited
+stock and world seafood consumption have a similar pattern. For each
+individual trend between two lines in Graph.6a, we can find out a
+similar trend between two lines with the corresponded color in Graph.6b.
+
+It is interesting that most of the line (except the trend between yellow
+and purple) in the Graph.6b are on th left to the line with same color
+in Graph.6c. This implies that the trend in consumption always delayed
+compared with the corresponding trend in overexploited stock.
+
+Moreover, Graph.6d indicates that sustainable stock having a strong negative
+correlation with seafood consumption, which further proved our
+observation in Graph.6b and 6c. 
+
+```{r 6f, echo=FALSE, warning = FALSE, message = FALSE, preserve = TRUE, fig.pos = 'H', out.extra = ""}
+stockL <- stock %>% 
+       pivot_longer(cols = 'Share of fish stocks within biologically sustainable levels (FAO, 2020)':'Share of fish stocks that are overexploited', names_to= "Type", values_to = "Proportion")  %>% 
+       filter(Entity!= "World") 
+stockL_sustainable <- stockL %>% 
+       filter(Type=='Share of fish stocks within biologically sustainable levels (FAO, 2020)')
+stockL_overexploited <- stockL %>% 
+       filter(Type=='Share of fish stocks that are overexploited')
+  Graph.6d <- ggplot(stockL_sustainable, aes(x = Entity, y = Proportion , fill = Entity)) +
+       geom_col(position = "stack") +
+       facet_wrap(Year~ Type, nrow=2)+
+       theme(axis.text.x = element_text(angle = 60,  hjust = 1)) 
+  
+  
+  Graph.6e <- ggplot(stockL_overexploited, aes(x = Year, y = Proportion , colour = Entity)) +
+       geom_line() +
+       facet_wrap( ~ Entity, nrow=3)+
+       theme(axis.text.x = element_text(angle = 60,  hjust = 1)) 
+  
+  
+ 
+  stockL_sustainableW  <- stock %>% 
+      pivot_longer(cols = 'Share of fish stocks within biologically sustainable levels (FAO, 2020)':'Share of fish stocks that are overexploited', names_to= "Type", values_to = "Proportion") %>%
+      filter(Type=='Share of fish stocks within biologically sustainable levels (FAO, 2020)')%>% 
+      filter(Year %in% c("2015","2017"))%>%
+      dplyr::select(-Type )%>%
+      dplyr::select(-Code )%>%
+      pivot_wider(names_from = Year, values_from = Proportion)%>%
+      rename('Sustainable2017'='2017','Sustainable2015'='2015')%>%        mutate(percentage_change= (Sustainable2017-Sustainable2015)/Sustainable2015*100)%>%
+      mutate_if(is.numeric, round, digits = 4)  
+  
+    
+   Graph.6f <- ggplot(stockL_sustainableW,aes(x=reorder(Entity, percentage_change), y=percentage_change, fill=Entity))+
+      geom_col(col = ifelse(stockL_sustainableW$percentage_change == !0,'red','green'))+
+      theme(axis.text.x = element_text(angle = 60, hjust = 1))+
+      labs(x = "Entity", y = "Percentage change ")+
+      ggtitle("Graph.6f: Change of sustainable stock level 2015-17")+
+      coord_flip()
+     
+     
+ggplotly(Graph.6f)
+  
+```
+
+Next, we plotted graphs to check the stock level based on regions.
+
+As we can see from Graph.6f,the world's sustainable stock declined
+1.2% between 2015-2017. The main factor contributed to this drop is the
+decreased sustainable stock in Northwest Pacific and Northwest Central
+Atlantic which were 21% and 24% respectively.
+
+In comparison, Southeast Pacific, Southwest Pacific and Southwest
+Atlantic experienced the largest increase in sustainable stock.
+
+It is worth noting that the stock level of Southeast Central
+Atlantic,Eastern Central Pacific and Eastern Central Atlantic were
+almost unchanged.
+
+### Summary and interesting findings:
+
+1 The level of overexploited stock increasing with fluctuation overtime.
+
+2 There are similar pattern between the trend of overexploited stock and
+world seafood consumption since 1989.
+
+3 Compared with stock level, there are lags shown in the world
+consumption for each similar trend.
+
+4 Some regions indicate very stable stock level between 2015-17.
+
+# Conclusion
+
+The seafood consumption and production keep increase with the time
+change. Moreover, it is noteable that a strongly positive linear
+relationship between fish consumption and production. China produces the
+most seafood in worldwide and Asia is the main continent producing
+seafood. Pelagic fish has the highest production scale and most of them
+comes from Americas.
+
+Compared with 1960s, developing countries from South-east Asia take more
+seats in top 10 seafood producers in 2010s. Also, farmed fishing is the
+most important factor to the improvement overall productivity. Moreover,
+we observe that overexploited stock has strong positive correlation with
+world fish consumption.
+
+# Limitation and recommendation
+
+1 With missing value and incomplete data in 'production' and 'captured
+vs farmed', this study may lack accuracy for visualization.
+
+2 Only 2 years data is available for most entities in 'stock' data set,
+which make it difficult to analyzing long term performance.
+
+3 There is not a clear definition about those 'Entity' in 'stock' data.
+In this case, we are unable to link those entities with countries to
+have a deeper analysis.
+
+4 Future research would benefit from the use of more datasets to broaden
+the prospective of analysis. For example, a data of stock level based on
+each country's performance may help us to dig more insights in terms of
+sustainable fishing.
 
 # References
 
@@ -460,3 +1087,6 @@ R Markdown. R package version 0.26.
 Zhu H (2021). *kableExtra: Construct Complex Table with 'kable' and Pipe
 Syntax*. R package version 1.3.4,
 <https://CRAN.R-project.org/package=kableExtra>.
+
+
+
