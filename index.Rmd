@@ -31,6 +31,21 @@ knitr::opts_chunk$set(echo = FALSE,
                       fig.align = "center")
 ```
 
+# Introduction and motivation
+
+Global fishing receives a great deal of attention in the media for the past decades. The rise of world population has increased the demand for seafood across the world. Meanwhile, the health of fish population in the world remains as a concern with the rise of global fishing. Fish farming (or ‘aquaculture’)helps to contribute to the seafood production while alleviating the pressure of wild fisheries. 
+
+This study is based on the data sets of global fishing. We explore these data by analyzing the performance for each country/region in terms of consumption, production and fish stock level. Moreover, we compare different data sets to reveal unexpected findings.
+
+We begin by describing the data in the next section, including the way we source it and prepare it for analysis. 
+
+In the analysis section, we present our observations through graphical displays. Our main tool is R, a programming language for statistical computing and graphics.
+
+
+
+
+
+
 # Data description
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
